@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
+    android:padding="30dp"
+    tools:context=".ui.fragments.ProfileSettingsFragment">
+
+    <LinearLayout
+        android:id="@+id/back_button_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back_button"></ImageView>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/profile_settings_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/inter_bold"
+        android:text="Profile settings"
+        android:textColor="#475569"
+        android:textSize="28sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back_button_ll"
+        app:layout_goneMarginTop="30dp"></TextView>
+
+    <LinearLayout
+        android:id="@+id/email_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="15dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_settings_tv">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:fontFamily="@font/inter_medium"
+            android:text="Email address"
+            android:textColor="#94A3B8"
+            android:textSize="13sp"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:drawableRight="@drawable/icon_green_tick"
+            android:drawablePadding="10dp"
+            android:fontFamily="@font/inter_medium"
+            android:text="Rajesh.Mekala@localfox.au"
+            android:textColor="#475569"
+            android:textSize="15sp"></TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mobile_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="15dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/email_ll">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_medium"
+                android:text="Mobile number"
+                android:textColor="#94A3B8"
+                android:textSize="13sp"></TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:fontFamily="@font/inter_medium"
+                android:text="Update"
+                android:textColor="#EF4665"
+                android:textSize="13sp"></TextView>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:drawableRight="@drawable/icon_green_tick"
+            android:drawablePadding="10dp"
+            android:fontFamily="@font/inter_medium"
+            android:text="+61 484 484 484"
+            android:textColor="#475569"
+            android:textSize="15sp"></TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/address_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="15dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mobile_ll">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:fontFamily="@font/inter_medium"
+                android:text="Address"
+                android:textColor="#94A3B8"
+                android:textSize="13sp"></TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:fontFamily="@font/inter_medium"
+                android:text="31 Barrallier Drive Marsden Park NSW 2765"
+                android:textColor="#475569"
+                android:textSize="15sp"></TextView>
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="20dp"
+            android:fontFamily="@font/inter_medium"
+            android:text="Update"
+            android:textColor="#EF4665"
+            android:textSize="13sp"></TextView>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

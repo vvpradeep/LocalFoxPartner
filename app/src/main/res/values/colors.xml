@@ -8,6 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="app_bg">#F3F4F6</color>
-
+    <color name="green_bg">#1f9c68</color>
+    <color name="green_toast_bg">#c5edce</color>
+    <color name="green_toast_color">#115821</color>
+    <color name="red_toast_bg">#f8d7da</color>
+    <color name="red_toast_color">#751a20</color>
 
 </resources>

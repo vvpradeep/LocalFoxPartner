@@ -28,7 +28,7 @@
         android:id="@+id/profile_settings_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/inter_bold"
         android:text="Profile settings"
         android:textColor="#475569"

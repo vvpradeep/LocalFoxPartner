@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.localfox.partner.databinding.ActivityCreateAccountBinding
+import com.localfox.partner.entity.RegistrartionEntity
 
 class CreateAccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateAccountBinding
+    var registrartionEntity: RegistrartionEntity = RegistrartionEntity()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,9 +28,26 @@ class CreateAccountActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
+        binding.backButtonLl.setOnClickListener {
+            finish();
+        }
+
         binding.nextButton.setOnClickListener {
-            val intent = Intent(this, SignUpMobileNumberActivity::class.java)
-            startActivity(intent)
+            if (binding.firstNameEt!!.text!!.toString().trim().isNullOrBlank()) {
+                binding.firstNameEt!!.setError("enter valid first name")
+            }
+            if (binding.lastNameEt!!.text!!.toString().trim().isNullOrBlank()) {
+                binding.lastNameEt!!.setError("enter valid last name")
+            }
+            if (!binding.firstNameEt!!.text!!.toString().trim().isNullOrBlank() && !binding.lastNameEt!!.text!!.toString().trim().isNullOrBlank()) {
+                val intent = Intent(this, SignUpMobileNumberActivity::class.java)
+                registrartionEntity.firstName = binding.firstNameEt!!.text!!.toString();
+                registrartionEntity.lastName = binding.lastNameEt!!.text!!.toString()
+                intent.putExtra("registrartionEntity",registrartionEntity)
+                startActivity(intent)
+            }
         }
     }
+
+
 }

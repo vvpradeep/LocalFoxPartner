@@ -17,6 +17,7 @@
         android:layout_marginTop="10dp"
         android:text="@string/local_fox"
         android:textSize="30sp"
+        android:fontFamily="@font/inter_extrabold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"></TextView>
@@ -28,6 +29,7 @@
         android:layout_marginTop="60dp"
         android:text="Email address"
         android:textColor="#94A3B8"
+        android:fontFamily="@font/inter_regular"
         android:textSize="15sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -37,10 +39,11 @@
         android:id="@+id/email_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="1dp"
         android:background="@drawable/edittext_round_corner_bg"
         android:padding="14dp"
         android:textColor="#94A3B8"
+        android:fontFamily="@font/inter_medium"
         android:textSize="15sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -53,6 +56,7 @@
         android:layout_marginTop="20dp"
         android:text="Password"
         android:textColor="#94A3B8"
+        android:fontFamily="@font/inter_regular"
         android:textSize="15sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -62,11 +66,13 @@
         android:id="@+id/password_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="1dp"
+        android:fontFamily="@font/inter_medium"
         android:background="@drawable/edittext_round_corner_bg"
         android:padding="14dp"
         android:textColor="#94A3B8"
         android:textSize="15sp"
+        android:inputType="text|textPassword"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_name"></EditText>
@@ -79,7 +85,9 @@
         android:text="@string/terms_and_conditions"
         android:textColor="#94A3B8"
         android:textSize="15sp"
+        android:fontFamily="@font/inter_regular"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:gravity="center_horizontal"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_et"></TextView>
 
@@ -93,6 +101,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:padding="12dp"
+        android:fontFamily="@font/inter_semibold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/terms_and_conditions_tv"></androidx.appcompat.widget.AppCompatButton>
@@ -105,6 +114,7 @@
         android:gravity="right"
         android:text="Forgot Password"
         android:textColor="#F43F5E"
+        android:fontFamily="@font/inter_medium"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_button">></TextView>
@@ -118,9 +128,20 @@
         android:text="Sign up"
         android:textAllCaps="false"
         android:textColor="@color/white"
+        android:fontFamily="@font/inter_semibold"
         android:padding="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"></androidx.appcompat.widget.AppCompatButton>
+
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ProgressBar>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

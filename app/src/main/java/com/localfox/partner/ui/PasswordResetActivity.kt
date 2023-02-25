@@ -29,6 +29,9 @@ class PasswordResetActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
+        binding.backButtonLl.setOnClickListener {
+            finish();
+        }
         binding.createAccountButton.setOnClickListener {
             val intent = Intent(this, AccountCreatedActivity::class.java)
             startActivity(intent)

@@ -21,8 +21,8 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="43dp"
+                android:layout_height="41dp"
                 android:background="@drawable/imagep"></ImageView>
 
             <LinearLayout
@@ -40,8 +40,7 @@
                     android:textColor="#475569"
                     android:textSize="16sp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_goneMarginTop="30dp"></TextView>
+                    app:layout_constraintTop_toTopOf="parent"></TextView>
 
 
                 <TextView
@@ -53,6 +52,7 @@
                     android:text="Marsden Park, NSW 2765"
                     android:textColor="#64748B"
                     android:textSize="12sp"
+                    android:drawablePadding="5dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_goneMarginTop="30dp"></TextView>
@@ -65,6 +65,7 @@
                     android:text="Posted on 21 Jan 2022 11:45 PM"
                     android:textColor="#94A3B8"
                     android:textSize="12sp"
+                    android:layout_marginLeft="18dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_goneMarginTop="30dp"></TextView>
@@ -79,18 +80,19 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight=".4"
+                android:layout_weight=".55"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/round_corner_bg"
+                    android:background="@drawable/status_round_corner_bg"
                     android:orientation="horizontal">
 
                     <TextView
@@ -113,20 +115,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight=".2"
+                android:layout_weight=".15"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/round_corner_bg"
+                    android:background="@drawable/location_round_corner_bg"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="#33B34DE2"
                         android:padding="10dp"
                         android:src="@drawable/icon_location_search"></ImageView>
                 </LinearLayout>
@@ -136,47 +137,45 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight=".2"
+                android:layout_weight=".15"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/round_corner_bg"
+                    android:background="@drawable/mail_round_corner_bg"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="#1AF43F5E"
                         android:padding="10dp"
                         android:src="@drawable/icon_mail_search"></ImageView>
-                </LinearLayout>
+                </FrameLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight=".2"
+                android:layout_weight=".15"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/round_corner_bg"
+                    android:background="@drawable/call_round_corner_bg"
+                    android:padding="10dp"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="#1A2AA76B"
-                        android:padding="10dp"
                         android:src="@drawable/icon_call_search"></ImageView>
 
-                </LinearLayout>
+                </FrameLayout>
             </LinearLayout>
 
         </LinearLayout>

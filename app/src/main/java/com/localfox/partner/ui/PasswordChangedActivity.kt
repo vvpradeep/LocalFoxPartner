@@ -26,5 +26,9 @@ class PasswordChangedActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
+
+        binding.closeButtonLl.setOnClickListener {
+            finish();
+        }
     }
 }

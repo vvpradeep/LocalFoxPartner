@@ -10,10 +10,6 @@ class LoginEntity {
     var token: String? = null
     @SerializedName("expiry")
     var expiry: String? = null
-    @SerializedName("isEmailVerified")
-    var isEmailVerified: String? = null
-    @SerializedName("isApproved")
-    var isApproved: String? = null
-
-
+    @SerializedName("isMobileVerified")
+    var isMobileVerified: String? = null
 }

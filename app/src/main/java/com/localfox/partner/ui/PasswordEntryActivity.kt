@@ -62,15 +62,16 @@ class PasswordEntryActivity : AppCompatActivity() {
         binding: ActivityPasswordEntryBinding, registrartionEntity: RegistrartionEntity
     ) {
         try {
-
+            binding.progressCircular.setVisibility(View.VISIBLE)
             val json = JSONObject()
             json.put("firstName", registrartionEntity.firstName)
             json.put("lastName", registrartionEntity.lastName)
             json.put("mobileNumber", registrartionEntity.mobileNumber)
             json.put("emailAddress", registrartionEntity.emailAddress)
-            json.put("password", registrartionEntity.password)
+            json.put("password", password)
             json.put("mobileVerificationReference", registrartionEntity.mobileVerificationReference)
             json.put("emailVerificationReference", registrartionEntity.emailVerificationReference)
+
             val requestBody: RequestBody =
                 RequestBody.create(MediaType.parse("application/json"), json.toString())
             val call: Call<ResponseBody> = ApiUtils.apiService.registerPartner(requestBody)
@@ -84,9 +85,9 @@ class PasswordEntryActivity : AppCompatActivity() {
                         if (response!!.isSuccessful && response!!.body() != null) {
                             val intent = Intent(
                                 this@PasswordEntryActivity,
-                                CreateAccountActivity::class.java
+                                AccountCreatedActivity::class.java
                             )
-                            intent.putExtra("registrartionEntity", registrartionEntity)
+                            //intent.putExtra("registrartionEntity", registrartionEntity)
                             startActivity(intent)
                         } else {
                             MyApplication.applicationContext().showInvalidErrorToast()

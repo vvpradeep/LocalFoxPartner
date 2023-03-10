@@ -1,16 +1,15 @@
 package com.localfox.partner.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.localfox.partner.R
 import com.localfox.partner.databinding.FragmentLeadsBinding
-import com.localfox.partner.databinding.FragmentProfileBinding
 import com.localfox.partner.ui.adapter.JobsAdapter
+
 
 class LeadsFragment : Fragment() {
 
@@ -27,6 +26,7 @@ class LeadsFragment : Fragment() {
 
         // this creates a vertical layout Manager
        _binding.jobsRecyclerview.layoutManager = LinearLayoutManager(activity)
+        _binding.jobsRecyclerview.setNestedScrollingEnabled(false);
 
         // ArrayList of class ItemsViewModel
         val data = ArrayList<String>()
@@ -36,6 +36,12 @@ class LeadsFragment : Fragment() {
         for (i in 1..20) {
             data.add("s")
         }
+
+        var normalLayoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        _binding.jobsRecyclerview.layoutParams = normalLayoutParams;
 
         // This will pass the ArrayList to our Adapter
         val adapter = JobsAdapter(data)

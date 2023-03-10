@@ -12,6 +12,7 @@ import com.localfox.partner.app.ApiUtils.apiService
 import com.localfox.partner.databinding.ToastLayoutBinding
 import com.localfox.partner.entity.LoginEntity
 import com.localfox.partner.entity.RegistrationResponseEntiity
+import com.localfox.partner.entity.profile.NotificationSettings
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
@@ -69,6 +70,27 @@ class MyApplication : Application() {
      fun  getStringPrefsData(key: String): String {
         var sharedPreferences = getSharedPreferences("prefs", 0)
         return sharedPreferences.getString(key, null).toString()
+    }
+
+    fun saveBolleanPrefsData(value: Boolean, key: String) {
+        var sharedPreferences = getSharedPreferences("prefs", 0)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(key, value)
+        editor.commit()
+    }
+    fun  getBolleanPrefsData(key: String): Boolean {
+        var sharedPreferences = getSharedPreferences("prefs", 0)
+        return sharedPreferences.getBoolean(key, false)
+    }
+
+    fun saveNotificationsData(notiSettings : NotificationSettings) {
+
+        saveBolleanPrefsData(notiSettings.smsNotifications!!, "SmsNotifications")
+        saveBolleanPrefsData(notiSettings.pushNotifications!!, "PushNotifications")
+        saveBolleanPrefsData(notiSettings.events!!, "Events")
+        saveBolleanPrefsData(notiSettings.emailNotifications!!, "EmailNotifications")
+        saveBolleanPrefsData(notiSettings.announcements!!, "Announcements")
+
     }
 
     fun getUserToken(): String  {

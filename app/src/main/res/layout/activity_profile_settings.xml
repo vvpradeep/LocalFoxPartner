@@ -60,6 +60,7 @@
             android:textSize="13sp"></TextView>
 
         <TextView
+            android:id="@+id/email_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
@@ -101,6 +102,7 @@
                 android:textSize="13sp"></TextView>
 
             <TextView
+                android:id="@+id/mobile_update_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -111,6 +113,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/mobile_number_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
@@ -152,6 +155,7 @@
                 android:textSize="13sp"></TextView>
 
             <TextView
+                android:id="@+id/address_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -163,6 +167,7 @@
 
 
         <TextView
+            android:id="@+id/address_update_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"

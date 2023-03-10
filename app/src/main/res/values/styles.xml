@@ -7,4 +7,20 @@
         <item name="android:textSize">10sp</item>
     </style>
 
+
+    <style name="NoBackgroundDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
+    </style>
+
+    <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:layout_marginTop">30dp</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+
+
 </resources>

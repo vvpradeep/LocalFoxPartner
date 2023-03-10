@@ -2,15 +2,14 @@ package com.localfox.partner.ui
 
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import com.localfox.partner.R
+import com.google.gson.Gson
+import com.localfox.partner.app.MyApplication
 import com.localfox.partner.databinding.ActivityProfileSettingsBinding
-import com.localfox.partner.databinding.ActivitySecurityBinding
+import com.localfox.partner.entity.profile.ProfileEntity
+import com.localfox.partner.ui.fragments.UpdateAddressFragment
+import com.localfox.partner.ui.fragments.UpdateMobileFragment
 
 
 class ProfileSettingsActivity : AppCompatActivity() {
@@ -35,5 +34,39 @@ class ProfileSettingsActivity : AppCompatActivity() {
         binding.backButtonLl.setOnClickListener {
             finish()
         }
+        setData()
+
+    }
+
+    fun setData() {
+        var data: String = MyApplication.applicationContext()
+            .getStringPrefsData(MyApplication.applicationContext().PROFILE_DATA)
+        val gson = Gson()
+        var profileData: ProfileEntity = gson.fromJson(
+            data,
+            ProfileEntity::class.java
+        )
+
+        binding.mobileNumberTextview.setText(profileData.data?.mobileNumber)
+        binding.emailTv.setText(profileData.data?.emailAddress)
+        binding.addressTv.setText(profileData.data?.address)
+
+        binding.mobileUpdateTv.setOnClickListener {
+            val updateMobileFragment: UpdateMobileFragment =
+                UpdateMobileFragment.newInstance()
+            updateMobileFragment.show(
+                supportFragmentManager,
+                UpdateMobileFragment.TAG
+            )
+        }
+        binding.addressUpdateTv.setOnClickListener {
+            val updateAddressFragment: UpdateAddressFragment =
+                UpdateAddressFragment.newInstance()
+            updateAddressFragment.show(
+                supportFragmentManager,
+                UpdateAddressFragment.TAG
+            )
+        }
+
     }
 }

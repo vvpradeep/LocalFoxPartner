@@ -13,6 +13,8 @@ import com.localfox.partner.app.MyApplication
 import com.localfox.partner.databinding.ActivityCreateAccountBinding
 import com.localfox.partner.databinding.ActivityMobileNumberVerificationBinding
 import com.localfox.partner.databinding.ActivitySignUpMobileNumberBinding
+import com.localfox.partner.entity.EmailVerificationEntity
+import com.localfox.partner.entity.MobileVerificationEntity
 import com.localfox.partner.entity.RegistrartionEntity
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -24,7 +26,7 @@ import retrofit2.Response
 
 class MobileNumberVerificationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMobileNumberVerificationBinding
-
+    var registrartionEntity : RegistrartionEntity? = null;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMobileNumberVerificationBinding.inflate(layoutInflater)
@@ -41,13 +43,17 @@ class MobileNumberVerificationActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
-        var registrartionEntity =
-            intent.getSerializableExtra("registrartionEntity") as RegistrartionEntity
+        if (intent.hasExtra("registrartionEntity")) {
+            registrartionEntity =
+                intent.getSerializableExtra("registrartionEntity") as RegistrartionEntity
+        }
         binding.backButtonLl.setOnClickListener {
             finish();
         }
         binding.nextButton.setOnClickListener {
-            sendmobileNumberOTP(binding.otpEt.text.toString(), binding, registrartionEntity)
+            if (registrartionEntity != null) {
+                sendmobileNumberOTP(binding.otpEt.text.toString(), binding, registrartionEntity!!)
+            }
         }
     }
 
@@ -63,12 +69,12 @@ class MobileNumberVerificationActivity : AppCompatActivity() {
             json.put("mobileNumber", registrartionEntity.mobileNumber)
             val requestBody: RequestBody =
                 RequestBody.create(MediaType.parse("application/json"), json.toString())
-            val call: Call<ResponseBody> = ApiUtils.apiService.validateMobileCode(requestBody)
+            val call: Call<MobileVerificationEntity> = ApiUtils.apiService.validateMobileCode(requestBody)
             call.enqueue(
-                object : Callback<ResponseBody> {
+                object : Callback<MobileVerificationEntity> {
                     override fun onResponse(
-                        call: Call<ResponseBody>?,
-                        response: Response<ResponseBody>?
+                        call: Call<MobileVerificationEntity>?,
+                        response: Response<MobileVerificationEntity>?
                     ) {
                         binding.progressCircular.setVisibility(View.GONE)
                         if (response!!.isSuccessful && response!!.body() != null) {
@@ -76,14 +82,17 @@ class MobileNumberVerificationActivity : AppCompatActivity() {
                                 this@MobileNumberVerificationActivity,
                                 SignUpEmailActivity::class.java
                             )
+                            var mobileVerification = response.body() as MobileVerificationEntity
+                            registrartionEntity.mobileVerificationReference = mobileVerification.mobileVerificationReference
                             intent.putExtra("registrartionEntity",registrartionEntity)
+                            intent.putExtra("isSignUp", true)
                             startActivity(intent)
                         } else {
                             MyApplication.applicationContext().showInvalidErrorToast()
                         }
                     }
 
-                    override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
+                    override fun onFailure(call: Call<MobileVerificationEntity>?, t: Throwable?) {
                         binding.progressCircular.setVisibility(View.GONE)
                         MyApplication.applicationContext().showInvalidErrorToast()
                         Log.d("response", "onFailure ")

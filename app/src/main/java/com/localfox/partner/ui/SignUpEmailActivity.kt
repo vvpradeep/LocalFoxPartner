@@ -24,6 +24,9 @@ import retrofit2.Response
 
 class SignUpEmailActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpEmailBinding
+    var registrartionEntity : RegistrartionEntity? = null
+    var emailPattern: String = "[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.+[a-z]+"
+    var isforgotPassword = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,18 +44,36 @@ class SignUpEmailActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
-        var registrartionEntity =
-            intent.getSerializableExtra("registrartionEntity") as RegistrartionEntity
+       var isSignUp = intent.getBooleanExtra("isSignUp", true)
+
+
+        if (isSignUp) {
+            registrartionEntity =
+                intent.getSerializableExtra("registrartionEntity") as RegistrartionEntity
+        }
+
+        if (intent.hasExtra("isforgot")) {
+            if (intent.getBooleanExtra("isforgot", false)) {
+                isforgotPassword = true;
+            }
+        }
         binding.backButtonLl.setOnClickListener {
             finish();
         }
         binding.nextButton.setOnClickListener {
+            if (!binding.emailEt!!.text.toString().trim { it <= ' ' }.matches(emailPattern.toRegex())) {
+                binding.emailEt!!.setError("enter valid email")
+                return@setOnClickListener
+            }
+            if (isSignUp) {
             sendEmail(
-                registrartionEntity.firstName!!,
+                registrartionEntity!!.firstName!!,
                 binding.emailEt.text.toString(),
                 binding,
-                registrartionEntity
-            )
+                registrartionEntity!!
+            )  } else if (isforgotPassword){
+                sendResetEmail(binding.emailEt.text.toString(), binding)
+            }
         }
     }
 
@@ -62,6 +83,7 @@ class SignUpEmailActivity : AppCompatActivity() {
         binding: ActivitySignUpEmailBinding, registrartionEntity: RegistrartionEntity
     ) {
         try {
+            binding.progressCircular.setVisibility(View.VISIBLE)
             val json = JSONObject()
             json.put("firstName", firstname)
             json.put("emailAddress", email)
@@ -82,6 +104,52 @@ class SignUpEmailActivity : AppCompatActivity() {
                             )
                             registrartionEntity.emailAddress = email
                             intent.putExtra("registrartionEntity", registrartionEntity)
+                            intent.putExtra("isSignUp", true)
+                            startActivity(intent)
+                        } else {
+                            MyApplication.applicationContext().showInvalidErrorToast()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
+                        binding.progressCircular.setVisibility(View.GONE)
+                        MyApplication.applicationContext().showInvalidErrorToast()
+                        Log.d("response", "onFailure ")
+
+                    }
+                })
+        } catch (e: Exception) {
+            binding.progressCircular.setVisibility(View.GONE)
+            Log.d("response", "Exception " + e.printStackTrace())
+        }
+    }
+
+    fun sendResetEmail(
+        email: String,
+        binding: ActivitySignUpEmailBinding) {
+        try {
+            binding.progressCircular.setVisibility(View.VISIBLE)
+            val json = JSONObject()
+            json.put("emailAddress", email)
+            val requestBody: RequestBody =
+                RequestBody.create(MediaType.parse("application/json"), json.toString())
+            val call: Call<ResponseBody> = ApiUtils.apiService.resetPassword(requestBody)
+            call.enqueue(
+                object : Callback<ResponseBody> {
+                    override fun onResponse(
+                        call: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
+                    ) {
+                        binding.progressCircular.setVisibility(View.GONE)
+                        if (response!!.isSuccessful && response!!.body() != null) {
+                            val intent = Intent(
+                                this@SignUpEmailActivity,
+                                EmailVerificationActivity::class.java
+                            )
+                            intent.putExtra("isSignUp", false)
+                            intent.putExtra("isforgot", isforgotPassword)
+                            intent.putExtra("email", email)
+
                             startActivity(intent)
                         } else {
                             MyApplication.applicationContext().showInvalidErrorToast()

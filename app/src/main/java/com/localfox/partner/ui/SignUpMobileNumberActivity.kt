@@ -75,8 +75,8 @@ class SignUpMobileNumberActivity : AppCompatActivity() {
         if (_mobileNumber.length == 9) {
             mobileNumber = "0" + mobileNumber
         }
-        480089161
         try {
+            binding.progressCircular.setVisibility(View.VISIBLE)
             val json = JSONObject()
             json.put("firstName", firstname)
             json.put("mobileNumber", mobileNumber)

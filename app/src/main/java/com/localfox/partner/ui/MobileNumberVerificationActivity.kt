@@ -51,7 +51,7 @@ class MobileNumberVerificationActivity : AppCompatActivity() {
             finish();
         }
         binding.nextButton.setOnClickListener {
-            if (registrartionEntity != null) {
+            if (registrartionEntity != null && binding.otpEt.text.toString().length == 4) {
                 sendmobileNumberOTP(binding.otpEt.text.toString(), binding, registrartionEntity!!)
             }
         }

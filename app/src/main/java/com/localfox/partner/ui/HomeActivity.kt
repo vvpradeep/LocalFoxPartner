@@ -50,6 +50,9 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+
+    }
     fun navigationPosition(position: Int) {
         binding.bottomNavigation.menu.getItem(position).isChecked = true
     }

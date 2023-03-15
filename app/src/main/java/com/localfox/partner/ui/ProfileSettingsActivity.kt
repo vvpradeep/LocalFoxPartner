@@ -53,7 +53,7 @@ class ProfileSettingsActivity : AppCompatActivity() {
 
         binding.mobileUpdateTv.setOnClickListener {
             val updateMobileFragment: UpdateMobileFragment =
-                UpdateMobileFragment.newInstance()
+                UpdateMobileFragment.newInstance(profileData.data?.mobileNumber!!, profileData.data?.lastName!!)
             updateMobileFragment.show(
                 supportFragmentManager,
                 UpdateMobileFragment.TAG

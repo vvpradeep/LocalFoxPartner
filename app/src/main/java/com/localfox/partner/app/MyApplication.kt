@@ -133,6 +133,7 @@ class MyApplication : Application() {
 
         val inflater = context.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = ToastLayoutBinding.inflate(inflater)
+        binding.msgTextView.setText(text)
         //Creating the Toast object
         val toast = Toast(applicationContext)
         toast.duration = Toast.LENGTH_LONG
@@ -148,6 +149,7 @@ class MyApplication : Application() {
             binding.msgTextView.setTextColor(context.resources.getColor(R.color.red_toast_color))
             binding.imageView.setBackgroundResource(android.R.drawable.stat_sys_warning)
         }
+        binding
     }
 
 //    fun sessionSignIn() {

@@ -38,7 +38,7 @@
 
 
         <TextView
-            android:id="@+id/mobile_number_textview"
+            android:id="@+id/address_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -60,10 +60,10 @@
             android:textColor="#475569"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mobile_number_textview"></TextView>
+            app:layout_constraintTop_toBottomOf="@+id/address_textview"></TextView>
 
         <TextView
-            android:id="@+id/mobile"
+            android:id="@+id/address_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
@@ -85,7 +85,7 @@
             android:orientation="horizontal"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mobile">
+            app:layout_constraintTop_toBottomOf="@+id/address_tv">
 
 
 
@@ -98,10 +98,33 @@
                 android:background="@null"
                 android:fontFamily="@font/inter_medium"
                 android:gravity="center_vertical"
-                android:inputType="number"
+                android:inputType="text"
                 android:padding="14dp"
                 android:textColor="#475569"
                 android:textSize="18sp"></EditText>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/result_ll"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/address_ll">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/edittext_round_corner_bg"
+                android:visibility="gone" />
+
+
         </LinearLayout>
 
 
@@ -118,7 +141,7 @@
             android:textColor="@color/white"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/address_ll"></androidx.appcompat.widget.AppCompatButton>
+            app:layout_constraintTop_toBottomOf="@+id/result_ll"></androidx.appcompat.widget.AppCompatButton>
 
 
         <ProgressBar

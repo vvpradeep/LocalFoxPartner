@@ -102,9 +102,13 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
 
+        binding.logoffTv.setOnClickListener {
+            logoutDialog()
+        }
         setData()
 
     }
+
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).navigationPosition(2)
@@ -137,6 +141,78 @@ class ProfileFragment : Fragment() {
 
 
     }
+
+    fun logoutDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        //set title for alert dialog
+        builder.setTitle("Logout")
+        //set message for alert dialog
+        builder.setMessage("Are you sure you want to logout?")
+
+
+        //performing positive action
+        builder.setPositiveButton("Yes") { dialogInterface, which ->
+            logout()
+            var intent = Intent(requireContext(), LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            MyApplication.applicationContext()
+                .saveStringPrefsData("", MyApplication.applicationContext().LOGIN_DATA)
+            MyApplication.applicationContext()
+                .saveStringPrefsData("", MyApplication.applicationContext().EMAIL)
+            MyApplication.applicationContext()
+                .saveStringPrefsData("", MyApplication.applicationContext().PASSWORD)
+            MyApplication.applicationContext()
+                .saveStringPrefsData("false", MyApplication.applicationContext().ISVAIDLOGIN)
+            MyApplication.applicationContext().client.cache()!!.evictAll()
+
+            startActivity(intent)
+
+        }
+//        //performing cancel action
+//        builder.setNeutralButton("Cancel"){dialogInterface , which ->
+//
+//        }
+        //performing negative action
+        builder.setNegativeButton("No") { dialogInterface, which ->
+
+        }
+        // Create the AlertDialog
+        val alertDialog: AlertDialog = builder.create()
+        // Set other dialog properties
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+
+    }
+
+    fun logout() {
+        try {
+            var headers = mutableMapOf<String, String>()
+            headers["Content-Type"] = "application/json"
+            headers["Authorization"] = "Bearer " + MyApplication.applicationContext().getUserToken()
+
+            val call: Call<ResponseBody> = ApiUtils.apiService.logout(headers)
+            call.enqueue(
+                object : Callback<ResponseBody> {
+                    override fun onResponse(
+                        call: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
+                    ) {
+                        if (response!!.isSuccessful) {
+
+                        } else {
+
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
+
+                    }
+                })
+        } catch (e: Exception) {
+            Log.d("response", "Exception " + e.printStackTrace())
+        }
+    }
+
     fun selectImage(profileId: String) {
 
         var options: Array<String> =
@@ -211,12 +287,14 @@ class ProfileFragment : Fragment() {
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
+
     private fun pickImageFromGallery() {
         //Intent to pick image
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         startActivityForResult(intent, IMAGE_PICK_CODE)
     }
+
     private fun getRealPathFromURI(contentURI: Uri, context: Context): String {
 //        val result: String
 //        val cursor = context.contentResolver.query(contentURI, null, null, null, null)
@@ -272,7 +350,7 @@ class ProfileFragment : Fragment() {
             uri = data?.data
             imageUri = uri
             mUri = imageUri
-            requireActivity().runOnUiThread {  binding.profileImage.setImageURI(data?.data) }
+            requireActivity().runOnUiThread { binding.profileImage.setImageURI(data?.data) }
             addProfilePhoto()
         } else if (resultCode == Activity.RESULT_OK && requestCode == GALARY_PERMISSION_CODE) {
             pickImageFromGallery()
@@ -285,20 +363,23 @@ class ProfileFragment : Fragment() {
             uri = mUri
             imageUri = uri
 
-            requireActivity().runOnUiThread {  binding.profileImage.setImageURI(mUri) }
+            requireActivity().runOnUiThread { binding.profileImage.setImageURI(mUri) }
             addProfilePhoto()
         }
     }
+
     fun getPath(uri: Uri?): String? {
         val projection =
             arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = requireContext().contentResolver.query(uri!!, projection, null, null, null) ?: return null
+        val cursor = requireContext().contentResolver.query(uri!!, projection, null, null, null)
+            ?: return null
         val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         cursor.moveToFirst()
         val s = cursor.getString(column_index)
         cursor.close()
         return s
     }
+
     fun addProfilePhoto() {
         try {
             var headers = mutableMapOf<String, String>()
@@ -347,7 +428,7 @@ class ProfileFragment : Fragment() {
                             imagePath = ""
                             try {
                                 if (response.code() == MyApplication.applicationContext().SESSION) {
-                                   // MyApplication.applicationContext().sessionSignIn()
+                                    // MyApplication.applicationContext().sessionSignIn()
                                 } else {
                                     val jObjError = JSONObject(response.errorBody()?.string())
                                     MyApplication.applicationContext()

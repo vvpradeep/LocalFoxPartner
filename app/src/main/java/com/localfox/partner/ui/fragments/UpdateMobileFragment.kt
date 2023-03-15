@@ -2,6 +2,7 @@ package com.localfox.partner.ui.fragments
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.localfox.partner.R
 import com.localfox.partner.app.ApiUtils
 import com.localfox.partner.app.MyApplication
 import com.localfox.partner.databinding.FragmentUpdateMobileNumberBinding
+import com.localfox.partner.ui.MobileNumberVerificationActivity
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -36,21 +38,21 @@ class UpdateMobileFragment : BottomSheetDialogFragment() {
         _binding.closeButtonLl.setOnClickListener {
             dismiss()
         }
+        _binding.mobileEt.setText(getArguments()?.getString("mobileNumber", ""))
         _binding.updateButton.setOnClickListener {
             if (!_binding.mobileEt.text.toString()
                     .isNullOrBlank() && (_binding.mobileEt.text.toString().length == 9 || _binding.mobileEt.text.toString().length == 10)
             )
 
                 sendmobileNumber(
-                    _binding.mobileEt.text.toString(),
+                    _binding.mobileEt.text.toString(),getArguments()?.getString("firstName", "").toString(),
                     _binding
                 )
             else _binding.mobileEt.setError("enter valid number")
         }
         return _binding.root
     }
-
-    fun sendmobileNumber(_mobileNumber: String, binding: FragmentUpdateMobileNumberBinding) {
+    fun sendmobileNumber(_mobileNumber: String, firstName: String, binding: FragmentUpdateMobileNumberBinding) {
         var mobileNumber: String = _mobileNumber
         if (_mobileNumber.length == 9) {
             mobileNumber = "0" + mobileNumber
@@ -58,14 +60,11 @@ class UpdateMobileFragment : BottomSheetDialogFragment() {
         try {
             binding.progressCircular.setVisibility(View.VISIBLE)
             val json = JSONObject()
+            json.put("firstName", firstName)
             json.put("mobileNumber", mobileNumber)
             val requestBody: RequestBody =
                 RequestBody.create(MediaType.parse("application/json"), json.toString())
-            var headers = mutableMapOf<String, String>()
-            headers["Content-Type"] = "application/json"
-            headers["Authorization"] = "Bearer " + MyApplication.applicationContext().getUserToken()
-            val call: Call<ResponseBody> =
-                ApiUtils.apiService.updateMobileNumber(requestBody, headers)
+            val call: Call<ResponseBody> = ApiUtils.apiService.sendMobileCode(requestBody)
             call.enqueue(
                 object : Callback<ResponseBody> {
                     override fun onResponse(
@@ -75,10 +74,19 @@ class UpdateMobileFragment : BottomSheetDialogFragment() {
                         binding.progressCircular.setVisibility(View.GONE)
                         if (response!!.isSuccessful && response!!.body() != null) {
 //                            val intent = Intent(
-//                                activity,
+//                                this@SignUpMobileNumberActivity,
 //                                MobileNumberVerificationActivity::class.java
 //                            )
+//                            registrartionEntity.mobileNumber = mobileNumber
+//                            intent.putExtra("registrartionEntity", registrartionEntity)
 //                            startActivity(intent)
+                            val updateMobileFragment: UpdateMobileOTPFragment =
+                                UpdateMobileOTPFragment.newInstance(_mobileNumber)
+                            updateMobileFragment.show(
+                                parentFragmentManager,
+                                UpdateMobileFragment.TAG
+                            )
+
                         } else {
                             MyApplication.applicationContext().showInvalidErrorToast()
                         }
@@ -96,6 +104,8 @@ class UpdateMobileFragment : BottomSheetDialogFragment() {
             Log.d("response", "Exception " + e.printStackTrace())
         }
     }
+
+
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -135,8 +145,13 @@ class UpdateMobileFragment : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "ActionBottomDialog"
-        fun newInstance(): UpdateMobileFragment {
-            return UpdateMobileFragment()
+        fun newInstance(mobileNumber: String, firstName: String): UpdateMobileFragment {
+           var fragment : UpdateMobileFragment = UpdateMobileFragment()
+            val args = Bundle()
+            args.putString("mobileNumber", mobileNumber)
+            args.putString("firstName", firstName)
+            fragment.setArguments(args)
+            return fragment
         }
     }
 }

@@ -60,6 +60,10 @@ interface APIInterface {
     @POST("/api/v1/partner/profile/uploadProfilePhoto")
     fun uploadProfilePhoto(@HeaderMap headers: Map<String, String>, @Part photo: MultipartBody.Part): Call<ResponseBody>
 
+    @PUT("/api/v1/partner/logout")
+    fun logout(@HeaderMap headers: Map<String, String>): Call<ResponseBody>
+
+
 }
 
 

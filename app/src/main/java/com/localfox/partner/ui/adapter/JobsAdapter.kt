@@ -4,11 +4,14 @@ package com.localfox.partner.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.localfox.partner.R
+import com.localfox.partner.entity.Jobs
+import com.localfox.partner.entity.JobsList
 
-class JobsAdapter(private val mList: List<String>) : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
-
+class JobsAdapter(private var jobs : ArrayList<Jobs>) : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // inflates the card_view_design view
@@ -28,18 +31,27 @@ class JobsAdapter(private val mList: List<String>) : RecyclerView.Adapter<JobsAd
 //        holder.imageView.setImageResource(ItemsViewModel.image)
 //
 //        // sets the text to the textview from our itemHolder class
-//        holder.textView.text = ItemsViewModel.text
+        var address = jobs!!.get(position).location
+        holder.nameTextView.text =jobs!!.get(position).customer!!.fullName
+        holder.addressTextView.text = address!!.suburb + " " + address!!.state + " "+address!!.postCode
+        holder.dateTextView.text = jobs!!.get(position).createdDate
 
     }
 
     // return the number of the items in the list
     override fun getItemCount(): Int {
-        return mList.size
+        return jobs!!.size
+    }
+
+    fun setData( jobs1 : ArrayList<Jobs>) {
+        jobs = jobs1
     }
 
     // Holds the views for adding it to image and text
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
-//        val imageView: ImageView = itemView.findViewById(R.id.imageview)
-//        val textView: TextView = itemView.findViewById(R.id.textView)
+        val imageView: ImageView = itemView.findViewById(R.id.profile_image)
+        val nameTextView: TextView = itemView.findViewById(R.id.name_tv)
+        val addressTextView: TextView = itemView.findViewById(R.id.address_tv)
+        val dateTextView: TextView = itemView.findViewById(R.id.date_tv)
     }
 }

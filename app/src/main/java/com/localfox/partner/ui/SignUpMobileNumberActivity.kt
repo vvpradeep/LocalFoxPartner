@@ -50,6 +50,9 @@ class SignUpMobileNumberActivity : AppCompatActivity() {
             finish();
         }
 
+        binding.backButtonLl.setOnClickListener {
+            finish()
+        }
 
         binding.nextButton.setOnClickListener {
             if (!binding.mobileEt.text.toString()

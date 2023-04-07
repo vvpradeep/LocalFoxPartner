@@ -82,15 +82,11 @@ class LeadsFragment : Fragment() {
         val activity = requireActivity() as HomeActivity
         val data = activity.jobsData1
         if (data != null) {
-            if (adapter != null &&  adapter is JobsAdapter) {
-                adapter!!.setData(data!!.data!!.jobs)
-                adapter!!.notifyDataSetChanged()
-                _binding.countTv.text = "" + data!!.invitationsCount;
-            } else {
-                adapter = JobsAdapter(data!!.data!!.jobs)
-                _binding.jobsRecyclerview.adapter = adapter
-                _binding.countTv.text = "" + data!!.invitationsCount;
-            }
+           
+            adapter = JobsAdapter(data!!.data!!.jobs)
+            _binding.jobsRecyclerview.adapter = adapter
+            _binding.countTv.text = "" + data!!.invitationsCount;
+
 
         }
         super.onResume()

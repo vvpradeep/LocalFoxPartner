@@ -105,6 +105,12 @@
             android:name="com.localfox.partner.ui.SecurityActivity"
             android:exported="false"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar" />
+
+        <activity
+            android:name="com.localfox.partner.ui.JobDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.LocalFoxPartner.NoActionBar" />
+
         <activity
             android:name="com.localfox.partner.ui.ProfileSettingsActivity"
             android:exported="false"
@@ -112,7 +118,6 @@
         <activity
             android:name="com.localfox.partner.ui.SplashActivity"
             android:exported="true"
-            android:label="@string/title_activity_splash"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

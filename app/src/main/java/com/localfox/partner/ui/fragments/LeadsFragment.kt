@@ -1,5 +1,6 @@
 package com.localfox.partner.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,47 +9,93 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.localfox.partner.databinding.FragmentLeadsBinding
+import com.localfox.partner.entity.Jobs
+import com.localfox.partner.entity.JobsList
+import com.localfox.partner.ui.HomeActivity
+import com.localfox.partner.ui.InvitationActivity
+import com.localfox.partner.ui.JobDetailsActivity
 import com.localfox.partner.ui.adapter.JobsAdapter
 
 
-class LeadsFragment : Fragment() {
+class LeadsFragment : Fragment(), JobsAdapter.OnItemClickListener {
 
 
     private lateinit var _binding: FragmentLeadsBinding
     private val binding get() = _binding
+    private var jobsData: JobsList? = null
+    private var adapter : JobsAdapter? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentLeadsBinding.inflate(inflater, container, false)
 
+       // getjobs(_binding)
 
         // this creates a vertical layout Manager
-       _binding.jobsRecyclerview.layoutManager = LinearLayoutManager(activity)
+        _binding.jobsRecyclerview.layoutManager = LinearLayoutManager(activity)
         _binding.jobsRecyclerview.setNestedScrollingEnabled(false);
 
-        // ArrayList of class ItemsViewModel
-        val data = ArrayList<String>()
-
-        // This loop will create 20 Views containing
-        // the image with the count of view
-        for (i in 1..20) {
-            data.add("s")
-        }
 
         var normalLayoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
         )
         _binding.jobsRecyclerview.layoutParams = normalLayoutParams;
 
         // This will pass the ArrayList to our Adapter
-        val adapter = JobsAdapter(data)
+        binding.invitationLl.setOnClickListener {
+            if (jobsData != null) {
+                for (invitations in jobsData!!.data!!.jobInviations) {
+                    val intent = Intent(
+                        activity,
+                        InvitationActivity::class.java
+                    )
+                    intent.putExtra("invitations", invitations)
+                    startActivity(intent)
+                }
+            }
+        }
 
-        // Setting the Adapter with the recyclerview
-        _binding.jobsRecyclerview.adapter = adapter
         return binding.root
     }
 
+
+    fun updateData(jobsData1: JobsList?) {
+        jobsData = jobsData1
+        val activity = requireActivity() as HomeActivity
+        if (adapter == null)if (activity.jobsList != null && activity.jobsList!!.size  > 0) {
+            adapter = JobsAdapter(activity.jobsList, requireContext()!!, this)
+        }
+        else {
+            if (activity.jobsList != null && activity.jobsList!!.size  > 0) {
+                adapter!!.setData(activity.jobsList)
+            }
+        }
+        _binding.jobsRecyclerview.adapter = adapter
+        _binding.countTv.text = "" + jobsData!!.invitationsCount;
+    }
+
+    override fun onResume() {
+        val activity = requireActivity() as HomeActivity
+        val data = activity.jobsData1
+        if (activity.jobsList != null && activity.jobsList!!.size  > 0) {
+            adapter = JobsAdapter(activity.jobsList, requireContext()!!, this)
+            _binding.jobsRecyclerview.adapter = adapter
+            _binding.countTv.text = "" + data!!.invitationsCount;
+        }
+        super.onResume()
+    }
+
+    override fun onItemClick(job: Jobs) {
+        val intent = Intent(
+            activity,
+            JobDetailsActivity::class.java
+        )
+        intent.putExtra("Jobs", job)
+        startActivity(intent)
+    }
+
+    override fun getNewPageData() {
+        (activity as HomeActivity).getPaginationData()
+    }
 }

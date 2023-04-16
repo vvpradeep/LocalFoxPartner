@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/inter_bold"
-            android:text="Invitation"
+            android:text="Job Details"
             android:textColor="#475569"
             android:textSize="28sp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -27,6 +27,7 @@
             app:layout_goneMarginTop="30dp"></TextView>
 
         <ImageView
+            android:id="@+id/close_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -35,11 +36,11 @@
             app:layout_constraintTop_toTopOf="parent"></ImageView>
 
         <include
+            android:id="@+id/included_ll"
+            layout="@layout/job_details_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/included_ll"
             android:layout_marginTop="20dp"
-            layout="@layout/job_details_item"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/invitation_tv"></include>

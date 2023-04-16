@@ -1,7 +1,5 @@
 <resources>
-    <string name="app_name">LocalFoxPartner</string>
-    <string name="title_activity_splash">SplashActivity</string>
-
+    <string name="app_name">LocalFox</string>
     <string name="local_fox"><font fgcolor='#414142'>LOCAL</font><font fgcolor='#F2994A'> FOX</font></string>
 
     <string name="terms_and_conditions"><font fgcolor='#64748B'>By logging in, you agree to our </font><font fgcolor='#FB7185'> Terms</font><font fgcolor='#64748B'> and</font><font fgcolor='#FB7185'> Conditions of use</font></string>

@@ -44,7 +44,7 @@
         android:padding="14dp"
         android:textColor="#94A3B8"
         android:fontFamily="@font/inter_medium"
-        android:textSize="15sp"
+        android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_name"></EditText>
@@ -71,7 +71,7 @@
         android:background="@drawable/edittext_round_corner_bg"
         android:padding="14dp"
         android:textColor="#94A3B8"
-        android:textSize="15sp"
+        android:textSize="18sp"
         android:inputType="text|textPassword"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

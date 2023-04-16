@@ -2,6 +2,7 @@ package com.localfox.partner.app;
 
 
 import com.localfox.partner.entity.EmailVerificationEntity
+import com.localfox.partner.entity.JobsList
 import com.localfox.partner.entity.LoginEntity
 import com.localfox.partner.entity.MobileVerificationEntity
 import com.localfox.partner.entity.profile.ProfileEntity
@@ -63,6 +64,14 @@ interface APIInterface {
     @PUT("/api/v1/partner/logout")
     fun logout(@HeaderMap headers: Map<String, String>): Call<ResponseBody>
 
+    @GET("/api/v1/partner/jobs/getJobs?")
+    fun getJobs(@HeaderMap headers: Map<String, String>, @Query("pageNumber") pageNumber: Int,  @Query("pageSize") pageSize: Int): Call<JobsList>
+
+    @POST("/api/v1/partner/jobs/acceptJob/{id}")
+    fun acceptJob(@HeaderMap headers: Map<String, String>, @Path("id") id: String): Call<JobsList>
+
+    @POST("/api/v1/partner/jobs/declineJob/{id}")
+    fun declineJob(@HeaderMap headers: Map<String, String>, @Path("id") id: String): Call<JobsList>
 
 }
 

@@ -8,9 +8,12 @@ import android.os.Looper
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.ui.AppBarConfiguration
+import com.bumptech.glide.Glide
 import com.localfox.partner.databinding.ActivityInvitationBinding
 import com.localfox.partner.databinding.ActivityJobDetailsBinding
 import com.localfox.partner.databinding.ActivitySplashBinding
+import com.localfox.partner.entity.JobInviations
+import com.localfox.partner.entity.Jobs
 
 class JobDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityJobDetailsBinding
@@ -32,5 +35,21 @@ class JobDetailsActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
+
+
+        var job: Jobs = intent.getSerializableExtra("Jobs") as Jobs
+
+        var address = job.location
+        binding.includedLl.nameTv.text =job.customer!!.fullName
+        binding.includedLl.dateTv.text = job.createdDate
+        if (job.images != null && job.images.size > 1)
+            Glide.with(this)
+                .load(job.images.get(1))
+                .into(binding.includedLl.profileImage)
+
+        binding.jobLocationTv.text =  address!!.suburb + " " + address!!.state + " "+address!!.postCode
+        binding.desTv.text = job.description
+        binding.timeTv.text = job.urgency
+
     }
 }

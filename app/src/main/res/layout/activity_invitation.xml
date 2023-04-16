@@ -27,6 +27,7 @@
             app:layout_goneMarginTop="30dp"></TextView>
 
         <ImageView
+            android:id="@+id/close_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -248,6 +249,7 @@
         app:layout_constraintRight_toRightOf="parent">
 
         <TextView
+            android:id="@+id/decline_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
@@ -263,6 +265,7 @@
             android:textSize="14sp"></TextView>
 
         <TextView
+            android:id="@+id/accept_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -278,5 +281,16 @@
             android:textSize="14sp"></TextView>
 
     </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"></ProgressBar>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -41,8 +41,8 @@ class UpdateMobileFragment : BottomSheetDialogFragment() {
         _binding.mobileEt.setText(getArguments()?.getString("mobileNumber", ""))
         _binding.updateButton.setOnClickListener {
             if (!_binding.mobileEt.text.toString()
-                    .isNullOrBlank() && (_binding.mobileEt.text.toString().length == 9 || _binding.mobileEt.text.toString().length == 10)
-            )
+                    .isNullOrBlank() && ((_binding.mobileEt.text.toString().startsWith("4", true) && _binding.mobileEt.text.toString().length == 9) ||
+                        (_binding.mobileEt.text.toString().startsWith("04", true) &&_binding.mobileEt.text.toString().length == 10)))
 
                 sendmobileNumber(
                     _binding.mobileEt.text.toString(),getArguments()?.getString("firstName", "").toString(),
@@ -88,7 +88,9 @@ class UpdateMobileFragment : BottomSheetDialogFragment() {
                             )
 
                         } else {
-                            MyApplication.applicationContext().showInvalidErrorToast()
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val error: String = jsonObject.getString("error")
+                            MyApplication.applicationContext().showErrorToast(""+ error)
                         }
                     }
 

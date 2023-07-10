@@ -1,13 +1,17 @@
 package com.localfox.partner.ui
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.gson.Gson
+import com.localfox.partner.R
 import com.localfox.partner.app.ApiUtils
 import com.localfox.partner.app.MyApplication
 import com.localfox.partner.databinding.ActivityNotificationBinding
@@ -95,10 +99,20 @@ class NotificationActivity : AppCompatActivity() {
                             MyApplication.applicationContext().saveBolleanPrefsData( binding.emailSwitch.isChecked, "EmailNotifications")
                             MyApplication.applicationContext().saveBolleanPrefsData( binding.announcementsSwitch.isChecked, "Announcements")
                             MyApplication.applicationContext().saveBolleanPrefsData( binding.eventsSwitch.isChecked, "Events")
+                            MyApplication.applicationContext().showSuccessToast("Your settings has been updated successfully")
 
-                            this@NotificationActivity.finish()
+                            val handler = Handler()
+                            val runnable = Runnable {
+                                this@NotificationActivity.finish()
+                            }
+                            handler.postDelayed(runnable, 2000)
+
                         } else {
-                            MyApplication.applicationContext().showInvalidErrorToast()
+                            if (response!!.code() == MyApplication.applicationContext().SESSION) {
+                                MyApplication.applicationContext().sessionSignIn()
+                            } else {
+                                MyApplication.applicationContext().showInvalidErrorToast()
+                            }
                         }
                     }
 

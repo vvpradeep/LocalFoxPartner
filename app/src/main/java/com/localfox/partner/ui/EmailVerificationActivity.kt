@@ -55,6 +55,7 @@ class EmailVerificationActivity : AppCompatActivity() {
             if (intent.getBooleanExtra("isforgot", false)) {
                 isforgotPassword = true;
             }
+
         }
         if (isSignUp) {
             registrartionEntity =
@@ -103,13 +104,15 @@ class EmailVerificationActivity : AppCompatActivity() {
                             intent.putExtra("registrartionEntity",registrartionEntity)
                             startActivity(intent)
                         } else {
-                            MyApplication.applicationContext().showInvalidErrorToast()
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val error: String = jsonObject.getString("error")
+                            MyApplication.applicationContext().showErrorToast(""+ error)
                         }
                     }
 
                     override fun onFailure(call: Call<EmailVerificationEntity>?, t: Throwable?) {
                         binding.progressCircular.setVisibility(View.GONE)
-                        MyApplication.applicationContext().showInvalidErrorToast()
+                        MyApplication.applicationContext().showErrorToast(""+ t!!.message)
                         Log.d("response", "onFailure ")
 
                     }
@@ -152,13 +155,15 @@ class EmailVerificationActivity : AppCompatActivity() {
                             intent.putExtra("isforgot", isforgotPassword)
                             startActivity(intent)
                         } else {
-                            MyApplication.applicationContext().showInvalidErrorToast()
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val error: String = jsonObject.getString("error")
+                            MyApplication.applicationContext().showErrorToast(""+ error)
                         }
                     }
 
                     override fun onFailure(call: Call<EmailVerificationEntity>?, t: Throwable?) {
                         binding.progressCircular.setVisibility(View.GONE)
-                        MyApplication.applicationContext().showInvalidErrorToast()
+                        MyApplication.applicationContext().showErrorToast(""+ t!!.message)
                         Log.d("response", "onFailure ")
 
                     }

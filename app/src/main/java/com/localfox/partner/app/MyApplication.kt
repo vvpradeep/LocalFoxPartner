@@ -20,6 +20,9 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MyApplication : Application() {
 
@@ -152,36 +155,36 @@ class MyApplication : Application() {
         binding
     }
 
-//    fun sessionSignIn() {
-//            try {
-//                showToast(false, "Session expired!. Please try again later",applicationContext)
-//                val json = JSONObject()
-//                json.put("emailAddress", MyApplication.applicationContext().getStringPrefsData(MyApplication.applicationContext().EMAIL))
-//                json.put("password", MyApplication.applicationContext().getStringPrefsData(MyApplication.applicationContext().PASSWORD))
-//                val requestBody: RequestBody = RequestBody.create(MediaType.parse("application/json"), json.toString())
-//                val call: Call<LoginEntity> = apiService.loginPost(requestBody)
-//                call.enqueue(
-//                    object : Callback<LoginEntity> {
-//                        override fun onResponse(call: Call<LoginEntity>?, response: Response<LoginEntity>?) {
-//
-//                            if (response!!.isSuccessful && response!!.body() != null) {
-//                                Log.d("response","response isSuccessful")
-//                                val gson = Gson()
-//                                val json = gson.toJson(response.body()) //
-//                                saveStringPrefsData(json,MyApplication.applicationContext().LOGIN_DATA)
-//                            }
-//                        }
-//                        override fun onFailure(call: Call<LoginEntity>?, t: Throwable?) {
-////                            MyApplication.applicationContext().saveStringPrefsData("",MyApplication.applicationContext().EMAIL)
-////                            MyApplication.applicationContext().saveStringPrefsData("",MyApplication.applicationContext().PASSWORD)
-//                        }
-//                    })
-//            } catch (e: Exception) {
-//                Log.d("response","Exception "+e.printStackTrace())
-//            }
-//
-//    }
-//
+    fun sessionSignIn() {
+            try {
+                showToast(false, "Session expired!. Please try again later",applicationContext)
+                val json = JSONObject()
+                json.put("emailAddress", MyApplication.applicationContext().getStringPrefsData(MyApplication.applicationContext().EMAIL))
+                json.put("password", MyApplication.applicationContext().getStringPrefsData(MyApplication.applicationContext().PASSWORD))
+                val requestBody: RequestBody = RequestBody.create(MediaType.parse("application/json"), json.toString())
+                val call: Call<LoginEntity> = apiService.loginPost(requestBody)
+                call.enqueue(
+                    object : Callback<LoginEntity> {
+                        override fun onResponse(call: Call<LoginEntity>?, response: Response<LoginEntity>?) {
+
+                            if (response!!.isSuccessful && response!!.body() != null) {
+                                Log.d("response","response isSuccessful")
+                                val gson = Gson()
+                                val json = gson.toJson(response.body()) //
+                                saveStringPrefsData(json,MyApplication.applicationContext().LOGIN_DATA)
+                            }
+                        }
+                        override fun onFailure(call: Call<LoginEntity>?, t: Throwable?) {
+//                            MyApplication.applicationContext().saveStringPrefsData("",MyApplication.applicationContext().EMAIL)
+//                            MyApplication.applicationContext().saveStringPrefsData("",MyApplication.applicationContext().PASSWORD)
+                        }
+                    })
+            } catch (e: Exception) {
+                Log.d("response","Exception "+e.printStackTrace())
+            }
+
+    }
+
     fun splashSIgnIn() {
             try {
                 val json = JSONObject()
@@ -210,6 +213,15 @@ class MyApplication : Application() {
             }
 
 
+    }
+
+    @Throws(ParseException::class)
+    fun formatDate(dateString: String?): String? {
+        val sdf1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        sdf1.setTimeZone(TimeZone.getTimeZone("UTC"))
+        val date: Date = sdf1.parse(dateString)
+        val sdf2 = SimpleDateFormat("dd MMM yyyy 'at' hh:mm a", Locale.getDefault())
+        return sdf2.format(date)
     }
 
 }

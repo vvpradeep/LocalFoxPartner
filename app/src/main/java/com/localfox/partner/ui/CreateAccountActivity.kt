@@ -48,6 +48,4 @@ class CreateAccountActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }

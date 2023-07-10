@@ -9,7 +9,7 @@ data class Jobs (
   @SerializedName("location"    ) var location    : Location?           = Location(),
   @SerializedName("_id"         ) var Id          : String?             = null,
   @SerializedName("customer"    ) var customer    : Customer?           = Customer(),
-  @SerializedName("partners"    ) var partners    : ArrayList<Partners> = arrayListOf(),
+  @SerializedName("partners"    ) var partners    : ArrayList<String> = arrayListOf(),
   @SerializedName("description" ) var description : String?             = null,
   @SerializedName("type"        ) var type        : String?             = null,
   @SerializedName("category"    ) var category    : Category?           = Category(),

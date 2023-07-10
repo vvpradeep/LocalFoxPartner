@@ -1,10 +1,7 @@
 package com.localfox.partner.app;
 
 
-import com.localfox.partner.entity.EmailVerificationEntity
-import com.localfox.partner.entity.JobsList
-import com.localfox.partner.entity.LoginEntity
-import com.localfox.partner.entity.MobileVerificationEntity
+import com.localfox.partner.entity.*
 import com.localfox.partner.entity.profile.ProfileEntity
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -18,60 +15,67 @@ import retrofit2.http.*
 
 interface APIInterface {
 
-    @POST("/api/v1/partner/authenticate")
+    @POST("/v1/partner/authenticate")
     fun loginPost(@Body request: RequestBody): Call<LoginEntity>
 
-    @POST("/api/v1/partner/verification/sendMobileCode")
+    @POST("/v1/partner/verification/sendMobileCode")
     fun sendMobileCode(@Body request: RequestBody): Call<ResponseBody>
 
-    @POST("/api/v1/partner/verification/validateMobileCode")
+    @POST("/v1/partner/verification/validateMobileCode")
     fun validateMobileCode(@Body request: RequestBody): Call<MobileVerificationEntity>
 
-    @POST("/api/v1/partner/verification/sendEmailCode")
+    @POST("/v1/partner/verification/sendEmailCode")
     fun sendEmailCode(@Body request: RequestBody): Call<ResponseBody>
 
-    @POST("/api/v1/partner/verification/validateEmailCode")
+    @POST("/v1/partner/verification/validateEmailCode")
     fun validateEmailCode(@Body request: RequestBody): Call<EmailVerificationEntity>
 
-    @POST("/api/v1/partner/registerPartner")
+    @POST("/v1/partner/registerPartner")
     fun registerPartner(@Body request: RequestBody): Call<ResponseBody>
 
-    @POST("/api/v1/partner/resetPassword")
+    @POST("/v1/partner/resetPassword")
     fun resetPassword(@Body request: RequestBody): Call<ResponseBody>
 
-    @POST("/api/v1/partner/verification/validateResetPasswordCode")
+    @POST("/v1/partner/verification/validateResetPasswordCode")
     fun validateResetPasswordCode(@Body request: RequestBody): Call<EmailVerificationEntity>
 
-    @POST("/api/v1/partner/setNewPassword")
+    @POST("/v1/partner/setNewPassword")
     fun setNewPassword(@Body request: RequestBody): Call<ResponseBody>
 
-    @GET("/api/v1/partner/profile/getProfile")
+    @GET("/v1/partner/profile/getProfile")
     fun getProfile(@HeaderMap headers: Map<String, String>): Call<ProfileEntity>
 
-    @PUT("/api/v1/partner/profile/updateNotificationSettings")
+    @PUT("/v1/partner/profile/updateNotificationSettings")
     fun updateNotifications(@Body request: RequestBody, @HeaderMap headers: Map<String, String>): Call<ResponseBody>
 
-    @PUT("/api/v1/partner/profile/updateMobileNumber")
+    @PUT("/v1/partner/profile/updateMobileNumber")
     fun updateMobileNumber(@Body request: RequestBody, @HeaderMap headers: Map<String, String>): Call<ResponseBody>
 
-    @PUT("/api/v1/partner/profile/updateAddress")
+    @PUT("/v1/partner/profile/updateAddress")
     fun updateAddress(@Body request: RequestBody, @HeaderMap headers: Map<String, String>): Call<ResponseBody>
 
     @Multipart
-    @POST("/api/v1/partner/profile/uploadProfilePhoto")
+    @POST("/v1/partner/profile/uploadProfilePhoto")
     fun uploadProfilePhoto(@HeaderMap headers: Map<String, String>, @Part photo: MultipartBody.Part): Call<ResponseBody>
 
-    @PUT("/api/v1/partner/logout")
+    @PUT("/v1/partner/logout")
     fun logout(@HeaderMap headers: Map<String, String>): Call<ResponseBody>
 
-    @GET("/api/v1/partner/jobs/getJobs?")
+    @GET("/v1/partner/jobs/getJobs?")
     fun getJobs(@HeaderMap headers: Map<String, String>, @Query("pageNumber") pageNumber: Int,  @Query("pageSize") pageSize: Int): Call<JobsList>
 
-    @POST("/api/v1/partner/jobs/acceptJob/{id}")
+    @POST("/v1/partner/jobs/acceptJob/{id}")
     fun acceptJob(@HeaderMap headers: Map<String, String>, @Path("id") id: String): Call<JobsList>
 
-    @POST("/api/v1/partner/jobs/declineJob/{id}")
+    @POST("/v1/partner/jobs/declineJob/{id}")
     fun declineJob(@HeaderMap headers: Map<String, String>, @Path("id") id: String): Call<JobsList>
+
+    @POST("/v1/partner/fcmToken/registerFcmToken")
+    fun registerFcmToken(@Body request: RequestBody, @HeaderMap headers: Map<String, String>): Call<FCMResponse>
+
+    @PUT("/v1/partner/fcmToken/linkPartner/{id}")
+    fun linkPartner(@HeaderMap headers: Map<String, String>, @Path("id") id: String): Call<ResponseBody>
+
 
 }
 

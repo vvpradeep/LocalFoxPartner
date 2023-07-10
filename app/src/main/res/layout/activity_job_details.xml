@@ -5,9 +5,11 @@
     android:layout_height="match_parent"
     android:background="@color/app_bg">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:padding="30dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -35,215 +37,243 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"></ImageView>
 
-        <include
-            android:id="@+id/included_ll"
-            layout="@layout/job_details_item"
+
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:orientation="vertical"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/invitation_tv"></include>
+            app:layout_constraintTop_toBottomOf="@id/invitation_tv">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/location_ll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:padding="20dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/included_ll">
-
-            <ImageView
-                android:id="@+id/location_icon"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_location_search"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"></ImageView>
+                android:paddingBottom="50dp"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/job_location_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:fontFamily="@font/inter_semibold"
-                android:gravity="top"
-                android:text="Job location"
-                android:textColor="#475569"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/location_icon"
-                app:layout_constraintLeft_toRightOf="@+id/location_icon"
-                app:layout_constraintStart_toStartOf="@+id/location_icon"></TextView>
+                <include
+                    android:id="@+id/included_ll"
+                    layout="@layout/job_details_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/invitation_tv"></include>
 
-            <TextView
-                android:id="@+id/address_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_regular"
-                android:gravity="top"
-                android:text="Marsden Park, NSW 2765"
-                android:textColor="#64748B"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@+id/job_location_tv"
-                app:layout_constraintTop_toBottomOf="@id/job_location_tv"></TextView>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/location_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/white"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/included_ll">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <ImageView
+                        android:id="@+id/location_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_location_search"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></ImageView>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/time_ll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:padding="20dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/location_ll">
+                    <TextView
+                        android:id="@+id/job_location_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:fontFamily="@font/inter_semibold"
+                        android:gravity="top"
+                        android:text="Job location"
+                        android:textColor="#475569"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/location_icon"
+                        app:layout_constraintLeft_toRightOf="@+id/location_icon"
+                        app:layout_constraintStart_toStartOf="@+id/location_icon"></TextView>
 
-            <ImageView
-                android:id="@+id/time_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_time_red"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"></ImageView>
+                    <TextView
+                        android:id="@+id/address_des_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="top"
+                        android:textColor="#64748B"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="@+id/job_location_tv"
+                        app:layout_constraintTop_toBottomOf="@id/job_location_tv"></TextView>
 
-            <TextView
-                android:id="@+id/job_time_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:fontFamily="@font/inter_semibold"
-                android:gravity="top"
-                android:text="How soon"
-                android:textColor="#475569"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/time_icon"
-                app:layout_constraintLeft_toRightOf="@+id/time_icon"
-                app:layout_constraintStart_toStartOf="@+id/time_icon"></TextView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/time_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_regular"
-                android:gravity="top"
-                android:text="In next couple of weeks"
-                android:textColor="#64748B"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@+id/job_time_tv"
-                app:layout_constraintTop_toBottomOf="@id/job_time_tv"></TextView>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/time_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/white"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/location_ll">
 
+                    <ImageView
+                        android:id="@+id/time_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_time_red"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></ImageView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/job_time_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:fontFamily="@font/inter_semibold"
+                        android:gravity="top"
+                        android:text="How soon"
+                        android:textColor="#475569"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/time_icon"
+                        app:layout_constraintLeft_toRightOf="@+id/time_icon"
+                        app:layout_constraintStart_toStartOf="@+id/time_icon"></TextView>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/des_ll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:padding="20dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/time_ll">
-
-            <ImageView
-                android:id="@+id/des_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_des"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"></ImageView>
-
-            <TextView
-                android:id="@+id/job_des_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:fontFamily="@font/inter_semibold"
-                android:gravity="top"
-                android:text="Job description"
-                android:textColor="#475569"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/des_icon"
-                app:layout_constraintLeft_toRightOf="@+id/des_icon"
-                app:layout_constraintStart_toStartOf="@+id/des_icon"></TextView>
-
-            <TextView
-                android:id="@+id/des_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_regular"
-                android:gravity="top"
-                android:text="We need a flooring to be done by end of this month at Marsden Park. There are some broken tiles in couple of bedrooms. Those need to be replaced with new and also install the new tiles in master bedroom. 16sqm."
-                android:textColor="#64748B"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@+id/job_des_tv"
-                app:layout_constraintTop_toBottomOf="@id/job_des_tv"></TextView>
+                    <TextView
+                        android:id="@+id/time_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="top"
+                        android:text="In next couple of weeks"
+                        android:textColor="#64748B"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="@+id/job_time_tv"
+                        app:layout_constraintTop_toBottomOf="@id/job_time_tv"></TextView>
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/photos_ll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:padding="20dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/des_ll">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/des_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/white"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/time_ll">
 
-            <ImageView
-                android:id="@+id/photo_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_photo"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"></ImageView>
+                    <ImageView
+                        android:id="@+id/des_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_des"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></ImageView>
 
-            <TextView
-                android:id="@+id/job_photo_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:fontFamily="@font/inter_semibold"
-                android:gravity="top"
-                android:text="Photos"
-                android:textColor="#475569"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/photo_icon"
-                app:layout_constraintLeft_toRightOf="@+id/photo_icon"
-                app:layout_constraintStart_toStartOf="@+id/photo_icon"></TextView>
+                    <TextView
+                        android:id="@+id/job_des_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:fontFamily="@font/inter_semibold"
+                        android:gravity="top"
+                        android:text="Job description"
+                        android:textColor="#475569"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/des_icon"
+                        app:layout_constraintLeft_toRightOf="@+id/des_icon"
+                        app:layout_constraintStart_toStartOf="@+id/des_icon"></TextView>
 
-            <GridLayout
-                android:id="@+id/photo_grid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_regular"
-                android:gravity="top"
-                android:text="We need a flooring to be done by end of this month at Marsden Park. There are some broken tiles in couple of bedrooms. Those need to be replaced with new and also install the new tiles in master bedroom. 16sqm."
-                android:textColor="#64748B"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@+id/job_photo_tv"
-                app:layout_constraintTop_toBottomOf="@id/job_photo_tv"></GridLayout>
+                    <TextView
+                        android:id="@+id/des_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="top"
+                        android:text="We need a flooring to be done by end of this month at Marsden Park. There are some broken tiles in couple of bedrooms. Those need to be replaced with new and also install the new tiles in master bedroom. 16sqm."
+                        android:textColor="#64748B"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="@+id/job_des_tv"
+                        app:layout_constraintTop_toBottomOf="@id/job_des_tv"></TextView>
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/photos_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/white"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:id="@+id/photo_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_photo"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+                    <TextView
+                        android:id="@+id/job_photo_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:fontFamily="@font/inter_semibold"
+                        android:gravity="top"
+                        android:text="Photos"
+                        android:textColor="#475569"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/photo_icon"
+                        app:layout_constraintLeft_toRightOf="@+id/photo_icon"
+                        app:layout_constraintTop_toTopOf="@+id/photo_icon"></TextView>
+
+                    <TextView
+                        android:id="@+id/no_photos_add_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="Photos not added yet"
+                        android:textSize="14sp"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="@+id/job_photo_tv"
+                        app:layout_constraintTop_toBottomOf="@id/job_photo_tv"></TextView>
+
+                    <com.localfox.partner.app.ExpandableHeightGridView
+                        android:id="@+id/photo_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:gravity="top"
+                        android:isScrollContainer="false"
+                        android:numColumns="3"
+                        android:scrollbars="none"
+                        android:textSize="14sp"
+                        android:stretchMode="columnWidth"
+                        app:layout_constraintStart_toStartOf="@+id/job_photo_tv"
+                        app:layout_constraintTop_toBottomOf="@id/job_photo_tv"></com.localfox.partner.app.ExpandableHeightGridView>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

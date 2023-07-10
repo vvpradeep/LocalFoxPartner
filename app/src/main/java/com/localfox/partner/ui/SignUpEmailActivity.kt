@@ -2,17 +2,14 @@ package com.localfox.partner.ui
 
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
-import com.localfox.partner.R
+import androidx.appcompat.app.AppCompatActivity
 import com.localfox.partner.app.ApiUtils
 import com.localfox.partner.app.MyApplication
-import com.localfox.partner.databinding.ActivityPasswordEntryBinding
 import com.localfox.partner.databinding.ActivitySignUpEmailBinding
-import com.localfox.partner.databinding.ActivitySignUpMobileNumberBinding
 import com.localfox.partner.entity.RegistrartionEntity
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -97,7 +94,7 @@ class SignUpEmailActivity : AppCompatActivity() {
                         response: Response<ResponseBody>?
                     ) {
                         binding.progressCircular.setVisibility(View.GONE)
-                        if (response!!.isSuccessful && response!!.body() != null) {
+                        if (response!!.isSuccessful) {
                             val intent = Intent(
                                 this@SignUpEmailActivity,
                                 EmailVerificationActivity::class.java
@@ -107,13 +104,16 @@ class SignUpEmailActivity : AppCompatActivity() {
                             intent.putExtra("isSignUp", true)
                             startActivity(intent)
                         } else {
-                            MyApplication.applicationContext().showInvalidErrorToast()
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val error: String = jsonObject.getString("error")
+                            MyApplication.applicationContext().showErrorToast(""+ error)
                         }
                     }
 
                     override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
                         binding.progressCircular.setVisibility(View.GONE)
-                        MyApplication.applicationContext().showInvalidErrorToast()
+                        MyApplication.applicationContext().showErrorToast(""+ t!!.message)
+                       // MyApplication.applicationContext().showInvalidErrorToast()
                         Log.d("response", "onFailure ")
 
                     }
@@ -141,7 +141,7 @@ class SignUpEmailActivity : AppCompatActivity() {
                         response: Response<ResponseBody>?
                     ) {
                         binding.progressCircular.setVisibility(View.GONE)
-                        if (response!!.isSuccessful && response!!.body() != null) {
+                        if (response!!.isSuccessful) {
                             val intent = Intent(
                                 this@SignUpEmailActivity,
                                 EmailVerificationActivity::class.java
@@ -152,13 +152,15 @@ class SignUpEmailActivity : AppCompatActivity() {
 
                             startActivity(intent)
                         } else {
-                            MyApplication.applicationContext().showInvalidErrorToast()
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val error: String = jsonObject.getString("error")
+                            MyApplication.applicationContext().showErrorToast(""+ error)
                         }
                     }
 
                     override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
                         binding.progressCircular.setVisibility(View.GONE)
-                        MyApplication.applicationContext().showInvalidErrorToast()
+                        MyApplication.applicationContext().showErrorToast(""+ t!!.message)
                         Log.d("response", "onFailure ")
 
                     }

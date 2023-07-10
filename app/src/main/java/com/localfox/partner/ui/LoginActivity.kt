@@ -1,14 +1,22 @@
 package com.localfox.partner.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
 
 import com.google.gson.Gson
+import com.localfox.partner.R
+import com.localfox.partner.app.ApiUtils
 import com.localfox.partner.app.ApiUtils.apiService
 import com.localfox.partner.app.MyApplication
 import com.localfox.partner.databinding.ActivityLoginBinding
@@ -16,10 +24,12 @@ import com.localfox.partner.entity.LoginEntity
 import com.localfox.partner.entity.profile.ProfileEntity
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.widget.TextView as TextView1
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -80,6 +90,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        setupClickableTextView(binding.termsAndConditionsTv)
 
         binding.loginButton.setOnClickListener {
             if (!binding.emailEt!!.text.toString().trim { it <= ' ' }.matches(emailPattern.toRegex())) {
@@ -102,7 +113,43 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-    //mr.rajeshMekala@yahoo.com
+
+    fun setupClickableTextView(textView: TextView1) {
+        val fullText = resources.getText(R.string.terms_and_conditions);
+
+        val spannableString = SpannableString(fullText)
+
+        val clickablePart1 = "Terms"
+        val clickablePart2 = "Conditions of use"
+
+        val clickableSpan1 = object : ClickableSpan() {
+            override fun onClick(view: View) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://localfox.com.au/partner/terms"))
+                startActivity(intent)
+            }
+        }
+
+        val clickableSpan2 = object : ClickableSpan() {
+            override fun onClick(view: View) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://localfox.com.au/partner/privacy"))
+                startActivity(intent)
+            }
+        }
+
+        val startIndex1 = fullText.indexOf(clickablePart1)
+        val endIndex1 = startIndex1 + clickablePart1.length
+
+        val startIndex2 = fullText.indexOf(clickablePart2)
+        val endIndex2 = startIndex2 + clickablePart2.length
+
+        spannableString.setSpan(clickableSpan1, startIndex1, endIndex1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(ForegroundColorSpan(resources.getColor(R.color.red)), startIndex1, endIndex1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(clickableSpan2, startIndex2, endIndex2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(ForegroundColorSpan(resources.getColor(R.color.red)), startIndex2, endIndex2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        textView.text = spannableString
+        textView.movementMethod = LinkMovementMethod.getInstance()
+    }
 
     fun loginAuthendication(eMail: String, ePass: String, binding: ActivityLoginBinding) {
         binding.progressCircular.setVisibility(View.VISIBLE)
@@ -155,7 +202,7 @@ class LoginActivity : AppCompatActivity() {
                                 intent.putExtra("email", eMail)
                                 startActivity(intent)
                             }
-                            //  linkfcm()
+                            linkfcm()
                         } else {
                             binding.progressCircular.setVisibility(View.GONE)
                             MyApplication.applicationContext()
@@ -226,8 +273,11 @@ class LoginActivity : AppCompatActivity() {
                                 Intent(this@LoginActivity, HomeActivity::class.java)
                             startActivity(intent)
                         }
-                        else{
+                        else{ if (response.code() == MyApplication.applicationContext().SESSION) {
+                            MyApplication.applicationContext().sessionSignIn()
+                        } else {
                             MyApplication.applicationContext().showInvalidErrorToast()
+                        }
                         }
                     }
                     override fun onFailure(call: Call<ProfileEntity>?, t: Throwable?) {
@@ -242,4 +292,39 @@ class LoginActivity : AppCompatActivity() {
             Log.d("response", "Exception " + e.printStackTrace())
         }
     }
+
+
+    fun linkfcm() {
+        try {
+            var headers = mutableMapOf<String, String>()
+            headers["Authorization"] = "Bearer " + MyApplication.applicationContext().getUserToken()
+            headers["Content-Type"] = "application/json"
+
+            val call: Call<ResponseBody> =
+                ApiUtils.apiService.linkPartner(headers, MyApplication.applicationContext().getStringPrefsData(MyApplication.applicationContext().FCM_TOKEN))
+            call.enqueue(
+                object : Callback<ResponseBody> {
+                    override fun onResponse(
+                        call: Call<ResponseBody>?,
+                        response: Response<ResponseBody>?
+                    ) {
+                        if (response!!.code() == MyApplication.applicationContext().SESSION) {
+                            MyApplication.applicationContext().sessionSignIn()
+                            Log.d("res", "res")
+                        } else {
+                            Log.d("res", "res")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
+                        Log.d("res", "res")
+                    }
+                })
+        } catch (e: Exception) {
+            Log.d("response", "Exception " + e.printStackTrace())
+        }
+    }
+
+
+
 }

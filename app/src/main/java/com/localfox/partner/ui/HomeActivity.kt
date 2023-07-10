@@ -1,6 +1,7 @@
 package com.localfox.partner.ui
 
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +21,7 @@ import com.localfox.partner.app.MyApplication
 import com.localfox.partner.databinding.ActivityHomeBinding
 import com.localfox.partner.entity.Jobs
 import com.localfox.partner.entity.JobsList
+import com.localfox.partner.entity.profile.ProfileEntity
 import com.localfox.partner.ui.fragments.LeadsFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,6 +36,7 @@ class HomeActivity : AppCompatActivity() {
     public var pageSize : Int = 10
     public var jobsList : ArrayList<Jobs>  = arrayListOf()
     public var lastDataFetched  = false
+    public var isDimensionApplied  = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,16 +61,31 @@ class HomeActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
 
         binding.bottomNavigation.setupWithNavController(navController)
-        getjobs(binding, pageNumber, pageSize)
+        var data: String = MyApplication.applicationContext()
+            .getStringPrefsData(MyApplication.applicationContext().PROFILE_DATA)
+        val gson = Gson()
+        var profileData: ProfileEntity = gson.fromJson(
+            data,
+            ProfileEntity::class.java
+        )
+        if (!(profileData!!.data!!.isApproved!!)) {
+            finish()
+            startActivity(Intent(this,AccountInActiveActivity::class.java).putExtra("name", profileData!!.data!!.firstName))
+        } else {
+            getjobs(binding, pageNumber, pageSize)
+        }
 
     }
 
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
-
-        var lMain: ConstraintLayout = findViewById(R.id.parent_ll);
-        lMain.getLayoutParams().height = lMain.getHeight() - getNavigationBarHeight();
+        if (!isDimensionApplied) {
+            isDimensionApplied = true;
+            var lMain: ConstraintLayout = findViewById(R.id.parent_ll);
+            lMain.getLayoutParams().height = lMain.getHeight() - getNavigationBarHeight();
+        }
         super.onWindowFocusChanged(hasFocus)
+
     }
 
     fun getNavigationBarHeight(): Int {
@@ -109,13 +127,17 @@ class HomeActivity : AppCompatActivity() {
                         if (jobsData1 != null  && jobsData1!!.data != null && jobsData1!!.data!!.jobs != null &&  jobsData1!!.data!!.jobs!!.size > 0) {
                             jobsList.addAll(jobsData1!!.data!!.jobs)
                             lastDataFetched  = true
+                            sendDataToFragment(response.body()!!)
                         } else {
                             lastDataFetched = false
                         }
 
-                        sendDataToFragment(response.body()!!)
                     } else {
-                        MyApplication.applicationContext().showInvalidErrorToast()
+                        if (response.code() == MyApplication.applicationContext().SESSION) {
+                            MyApplication.applicationContext().sessionSignIn()
+                        } else {
+                            MyApplication.applicationContext().showInvalidErrorToast()
+                        }
                     }
                 }
 

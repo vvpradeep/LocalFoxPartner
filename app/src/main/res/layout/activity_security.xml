@@ -6,7 +6,7 @@
     android:background="@color/app_bg"
     android:padding="30dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.fragments.SecurityFragment">
+    tools:context="com.localfox.partner.ui.SecurityActivity">
 
     <LinearLayout
         android:id="@+id/back_button_ll"
@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
+        android:layout_marginTop="30dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -68,6 +69,7 @@
         <Switch
             android:id="@+id/push_switch"
             android:layout_width="wrap_content"
+            android:theme="@style/SCBSwitch"
             android:layout_height="wrap_content"></Switch>
 
     </LinearLayout>
@@ -138,6 +140,7 @@
         <Switch
             android:id="@+id/email_switch"
             android:layout_width="wrap_content"
+            android:theme="@style/SCBSwitch"
             android:layout_height="wrap_content"></Switch>
 
     </LinearLayout>

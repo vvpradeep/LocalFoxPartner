@@ -1,11 +1,15 @@
 package com.localfox.partner.ui
 
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.provider.Telephony
+import android.text.TextUtils
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.localfox.partner.app.MyApplication
+import com.localfox.partner.app.SMSReceiver
 import com.localfox.partner.databinding.ActivityProfileSettingsBinding
 import com.localfox.partner.entity.profile.ProfileEntity
 import com.localfox.partner.ui.fragments.UpdateAddressFragment
@@ -15,10 +19,16 @@ import com.localfox.partner.ui.fragments.UpdateMobileFragment
 class ProfileSettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileSettingsBinding
 
+    var receiver =  SMSReceiver();
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        val intentFilter = IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION)
+        registerReceiver(receiver, intentFilter)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().setFlags(
@@ -38,6 +48,10 @@ class ProfileSettingsActivity : AppCompatActivity() {
 
     }
 
+    override fun onStop() {
+        unregisterReceiver(receiver)
+        super.onStop()
+    }
     fun setData() {
         var data: String = MyApplication.applicationContext()
             .getStringPrefsData(MyApplication.applicationContext().PROFILE_DATA)
@@ -49,7 +63,8 @@ class ProfileSettingsActivity : AppCompatActivity() {
 
         binding.mobileNumberTextview.setText(profileData.data?.mobileNumber)
         binding.emailTv.setText(profileData.data?.emailAddress)
-        binding.addressTv.setText(profileData.data?.address)
+        binding.addressTv.setText(profileData.data?.location!!.unit?: ""+ " " + (profileData.data?.location!!.streetNumber?: "") +" "+ (profileData.data?.location!!.streetName?: "") + " \n "
+        + (profileData.data?.location!!.suburb?: "")+" " + (profileData.data?.location!!.state?: "")+" " + (profileData.data?.location!!.postCode?: ""))
 
         binding.mobileUpdateTv.setOnClickListener {
             val updateMobileFragment: UpdateMobileFragment =
@@ -60,13 +75,21 @@ class ProfileSettingsActivity : AppCompatActivity() {
             )
         }
         binding.addressUpdateTv.setOnClickListener {
-            val updateAddressFragment: UpdateAddressFragment =
-                UpdateAddressFragment.newInstance()
-            updateAddressFragment.show(
-                supportFragmentManager,
-                UpdateAddressFragment.TAG
-            )
+            if (profileData.data == null || profileData.data?.address == null || TextUtils.isEmpty(profileData.data?.address)) {
+                val updateAddressFragment: UpdateAddressFragment =
+                    UpdateAddressFragment.newInstance("")
+                updateAddressFragment.show(
+                    supportFragmentManager,
+                    UpdateAddressFragment.TAG
+                )
+            } else {
+                val updateAddressFragment: UpdateAddressFragment =
+                    UpdateAddressFragment.newInstance(profileData.data?.address!!)
+                updateAddressFragment.show(
+                    supportFragmentManager,
+                    UpdateAddressFragment.TAG
+                )
+            }
         }
-
     }
 }

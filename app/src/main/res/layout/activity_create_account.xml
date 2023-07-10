@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
+        android:layout_marginTop="30dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -72,9 +73,10 @@
         android:layout_marginTop="1dp"
         android:background="@drawable/edittext_round_corner_bg"
         android:fontFamily="@font/inter_medium"
-        android:padding="14dp"
+        android:padding="12dp"
+        android:textSize="16dp"
         android:textColor="#94A3B8"
-        android:textSize="18sp"
+        android:lines="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/first_name"></EditText>
@@ -99,9 +101,10 @@
         android:layout_marginTop="1dp"
         android:background="@drawable/edittext_round_corner_bg"
         android:fontFamily="@font/inter_medium"
-        android:padding="14dp"
+        android:padding="12dp"
+        android:textSize="16dp"
+        android:lines="1"
         android:textColor="#94A3B8"
-        android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/last_name"></EditText>
@@ -127,6 +130,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/login_round_corner_bg"
         android:padding="12dp"
+        android:textSize="16dp"
         android:text="Next"
         android:textAllCaps="false"
         android:fontFamily="@font/inter_semibold"

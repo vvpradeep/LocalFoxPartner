@@ -4,32 +4,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/app_bg"
     android:fitsSystemWindows="true"
     android:padding="30dp"
-    android:background="@color/app_bg"
     android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
     tools:context="com.localfox.partner.ui.LoginActivity">
 
-    <TextView
+
+    <LinearLayout
         android:id="@+id/logo"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/local_fox"
-        android:textSize="30sp"
-        android:fontFamily="@font/inter_extrabold"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></TextView>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.7">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_extrabold"
+            android:src="@drawable/logo_login"
+            android:textColor="#414142"
+            android:textSize="26sp"></ImageView>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:background="#EF4665"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_extrabold"
+                android:includeFontPadding="false"
+                android:padding="0dp"
+                android:text="FOX"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp"></TextView>
+        </FrameLayout>
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/email_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/inter_regular"
         android:text="Email address"
         android:textColor="#94A3B8"
-        android:fontFamily="@font/inter_regular"
         android:textSize="15sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -41,10 +72,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         android:background="@drawable/edittext_round_corner_bg"
-        android:padding="14dp"
-        android:textColor="#94A3B8"
         android:fontFamily="@font/inter_medium"
-        android:textSize="18sp"
+        android:imeOptions="actionNext"
+        android:inputType="textEmailAddress"
+        android:lines="1"
+        android:padding="12dp"
+        android:textSize="16dp"
+        android:textColor="#94A3B8"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_name"></EditText>
@@ -54,9 +88,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/inter_regular"
         android:text="Password"
         android:textColor="#94A3B8"
-        android:fontFamily="@font/inter_regular"
         android:textSize="15sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -67,12 +101,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:fontFamily="@font/inter_medium"
         android:background="@drawable/edittext_round_corner_bg"
-        android:padding="14dp"
-        android:textColor="#94A3B8"
-        android:textSize="18sp"
+        android:fontFamily="@font/inter_medium"
+        android:imeOptions="actionDone"
         android:inputType="text|textPassword"
+        android:lines="1"
+        android:padding="12dp"
+        android:textSize="16dp"
+        android:textColor="#94A3B8"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_name"></EditText>
@@ -82,12 +118,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/inter_regular"
+        android:gravity="center_horizontal"
         android:text="@string/terms_and_conditions"
         android:textColor="#94A3B8"
         android:textSize="15sp"
-        android:fontFamily="@font/inter_regular"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:gravity="center_horizontal"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_et"></TextView>
 
@@ -97,11 +133,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:background="@drawable/login_round_corner_bg"
+        android:fontFamily="@font/inter_semibold"
+        android:padding="12dp"
         android:text="Login"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:padding="12dp"
-        android:fontFamily="@font/inter_semibold"
+        android:textSize="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/terms_and_conditions_tv"></androidx.appcompat.widget.AppCompatButton>
@@ -111,10 +148,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/inter_medium"
         android:gravity="right"
         android:text="Forgot Password"
         android:textColor="#F43F5E"
-        android:fontFamily="@font/inter_medium"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_button">></TextView>
@@ -125,11 +162,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
         android:background="@drawable/signup_round_corner_bg"
+        android:fontFamily="@font/inter_semibold"
+        android:padding="12dp"
         android:text="Sign up"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:fontFamily="@font/inter_semibold"
-        android:padding="12dp"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"></androidx.appcompat.widget.AppCompatButton>

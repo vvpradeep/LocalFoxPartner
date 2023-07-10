@@ -1,6 +1,9 @@
 package com.localfox.partner.ui.fragments
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,7 +12,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.localfox.partner.databinding.FragmentSearchBinding
 import com.localfox.partner.entity.Jobs
@@ -22,6 +28,9 @@ class SearchFragment : Fragment(), JobsAdapter.OnItemClickListener  {
     private lateinit var _binding: FragmentSearchBinding
     private val binding get() = _binding
     private var adapter : JobsAdapter? = null
+    var phoneNumber: String = "";
+
+    private val CALL_PERMISSION_REQUEST_CODE = 1010
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,10 +64,67 @@ class SearchFragment : Fragment(), JobsAdapter.OnItemClickListener  {
     override fun onResume() {
         val activity = requireActivity() as HomeActivity
         if (activity.jobsList != null && activity.jobsList!!.size  > 0) {
-            adapter = JobsAdapter(activity.jobsList, requireContext()!!, this)
+            adapter = JobsAdapter(activity.jobsList, requireContext()!!, this, true)
             _binding.jobsRecyclerview.adapter = adapter
         }
         super.onResume()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == CALL_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty()
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission granted
+            // Retry the phone call after permission is granted
+            makePhoneCall(phoneNumber)
+        } else {
+            // Permission denied
+            Toast.makeText(requireContext(), "Call permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun makePhoneCall(phoneNumber: String) {
+        val callIntent = Intent(Intent.ACTION_CALL)
+        callIntent.data = Uri.parse("tel:$phoneNumber")
+        startActivity(callIntent)
+    }
+
+    override fun onCallClick(phoneNumber: String) {
+        this.phoneNumber = phoneNumber;
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CALL_PHONE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.CALL_PHONE),
+                CALL_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            makePhoneCall(phoneNumber)
+        }
+    }
+
+    override fun onMailClick(mailID: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(mailID))
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
+    }
+
+    override fun onLocationClick(location: String, lat: Double, long: Double) {
+        val geoUri = Uri.parse("geo:$lat,$long")
+        val intent = Intent(Intent.ACTION_VIEW, geoUri)
+        val shareIntent = Intent.createChooser(intent, null)
+        startActivity(shareIntent)
     }
 
     override fun onItemClick(job: Jobs) {

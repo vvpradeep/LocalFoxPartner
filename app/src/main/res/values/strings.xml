@@ -5,6 +5,6 @@
     <string name="terms_and_conditions"><font fgcolor='#64748B'>By logging in, you agree to our </font><font fgcolor='#FB7185'> Terms</font><font fgcolor='#64748B'> and</font><font fgcolor='#FB7185'> Conditions of use</font></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 
 </resources>

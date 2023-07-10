@@ -13,5 +13,6 @@
     <color name="green_toast_color">#115821</color>
     <color name="red_toast_bg">#f8d7da</color>
     <color name="red_toast_color">#751a20</color>
-
+    <color name="colorAccent">#D81B60</color>
+    <color name="red">#FB7185</color>
 </resources>

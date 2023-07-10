@@ -24,6 +24,8 @@ import retrofit2.Response
 
 class PasswordResetActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPasswordResetBinding
+    var isforgotPassword = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +46,19 @@ class PasswordResetActivity : AppCompatActivity() {
         binding.backButtonLl.setOnClickListener {
             finish();
         }
+
+        if (intent.hasExtra("isforgot")) {
+            if (intent.getBooleanExtra("isforgot", false)) {
+                isforgotPassword = true;
+            }
+        }
+
+        if (isforgotPassword) {
+            binding.verificationTextview.setText("Reset password")
+            binding.discTextview.setText("Choose a password.")
+            binding.createAccountButton.setText("Reset Password")
+        }
+
         var email = intent.getStringExtra("email")
         var rid = intent.getStringExtra("rid")
 
@@ -76,20 +91,23 @@ class PasswordResetActivity : AppCompatActivity() {
                         response: Response<ResponseBody>?
                     ) {
                         binding.progressCircular.setVisibility(View.GONE)
-                        if (response!!.isSuccessful && response!!.body() != null) {
+                        if (response!!.isSuccessful) {
                             val intent = Intent(
                                 this@PasswordResetActivity,
                                 PasswordChangedActivity::class.java
                             )
+                            intent.putExtra("isforgot", isforgotPassword)
                             startActivity(intent)
                         } else {
-                            MyApplication.applicationContext().showInvalidErrorToast()
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val error: String = jsonObject.getString("error")
+                            MyApplication.applicationContext().showErrorToast(""+ error)
                         }
                     }
 
                     override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
                         binding.progressCircular.setVisibility(View.GONE)
-                        MyApplication.applicationContext().showInvalidErrorToast()
+                        MyApplication.applicationContext().showErrorToast(""+ t!!.message)
                         Log.d("response", "onFailure ")
 
                     }

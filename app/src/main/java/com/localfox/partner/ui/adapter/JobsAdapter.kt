@@ -2,18 +2,31 @@ package com.localfox.partner.ui.adapter
 
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.localfox.partner.R
+import com.localfox.partner.app.AppUtils
+import com.localfox.partner.app.LetterDrawable
+import com.localfox.partner.app.MyApplication
 import com.localfox.partner.entity.Jobs
-import com.localfox.partner.entity.JobsList
 
-class JobsAdapter(private var jobs : ArrayList<Jobs>, var context : Context, private val listener: OnItemClickListener) : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
+
+class JobsAdapter(private var jobs : ArrayList<Jobs>, var context : Context, private val listener: OnItemClickListener, var isSearch: Boolean) : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
     private var filteredData: List<Jobs> = jobs
     private var lastposition : Int = 0
 
@@ -48,16 +61,25 @@ class JobsAdapter(private var jobs : ArrayList<Jobs>, var context : Context, pri
 //
 //        // sets the text to the textview from our itemHolder class
         var address = filteredData!!.get(position).location
-        holder.nameTextView.text =filteredData!!.get(position).customer!!.fullName
-        holder.addressTextView.text = address!!.suburb + " " + address!!.state + " "+address!!.postCode
-        holder.dateTextView.text = filteredData!!.get(position).createdDate
-        if (filteredData.get(position).images != null && filteredData.get(position).images.size > 1) {
-            Glide.with(context)
-                .load(filteredData.get(position).images.get(1))
-                .into(holder.imageView)
-        }
+        if (filteredData!!.get(position).customer != null) {
+            holder.nameTextView.text = filteredData!!.get(position).customer!!.fullName
+            if (filteredData.get(position).customer!!.profilePhoto != null && !filteredData.get(position).customer!!.profilePhoto.toString().contains("no-photo.")) {
+                Glide.with(context)
+                    .load(filteredData.get(position).customer!!.profilePhoto)
+                    .into(holder.imageView)
+            } else if (filteredData.get(position).customer!!.fullName != null){
+                val parts = filteredData.get(position).customer!!.fullName!!.split(" ")
 
-        if (position == jobs.size - 1) {
+                Glide.with(context)
+                    .load(LetterDrawable(parts[0]!!.get(0)+""+parts[1]!!.get(0), context.applicationContext))
+                    .into(holder.imageView)
+            }
+
+        }
+        holder.addressTextView.text = address!!.suburb + " " + address!!.state + " "+address!!.postCode
+        holder.dateTextView.text =  MyApplication.applicationContext().formatDate(filteredData!!.get(position).createdDate)
+
+        if (position == jobs.size - 1 && jobs.size % 10 == 0) {
             lastposition = position
             listener.getNewPageData()
         }
@@ -66,6 +88,26 @@ class JobsAdapter(private var jobs : ArrayList<Jobs>, var context : Context, pri
             if (position != RecyclerView.NO_POSITION) {
                 listener.onItemClick(filteredData.get(position))
             }
+        }
+
+        holder.callFL.setOnClickListener {
+            if (filteredData!!.get(position).customer!= null && filteredData!!.get(position).customer!!.mobileNumber != null)
+                listener.onCallClick(filteredData!!.get(position).customer!!.mobileNumber!!)
+        }
+        holder.mailFL.setOnClickListener {
+            if (filteredData!!.get(position).customer!= null && filteredData!!.get(position).customer!!.emailAddress != null)
+                listener.onMailClick(filteredData!!.get(position).customer!!.emailAddress!!)
+        }
+        holder.locationFL.setOnClickListener {
+            if (filteredData!!.get(position).location!= null && filteredData!!.get(position).location!!.coordinates != null) {
+                val coordinates: ArrayList<Double> =
+                    filteredData!!.get(position).location!!.coordinates;
+                listener.onLocationClick("", coordinates.get(0), coordinates.get(1))
+            }
+        }
+
+        if (isSearch) {
+            holder.socialMediaLL.visibility = View.GONE
         }
 
     }
@@ -87,6 +129,9 @@ class JobsAdapter(private var jobs : ArrayList<Jobs>, var context : Context, pri
     interface OnItemClickListener {
         fun onItemClick(job: Jobs)
         fun getNewPageData()
+        fun onCallClick(phoneNumber: String)
+        fun onMailClick(mailID: String)
+        fun onLocationClick(location: String, lat: Double, Long: Double)
     }
 
     // Holds the views for adding it to image and text
@@ -95,5 +140,11 @@ class JobsAdapter(private var jobs : ArrayList<Jobs>, var context : Context, pri
         val nameTextView: TextView = itemView.findViewById(R.id.name_tv)
         val addressTextView: TextView = itemView.findViewById(R.id.address_tv)
         val dateTextView: TextView = itemView.findViewById(R.id.date_tv)
+        val socialMediaLL: LinearLayout = itemView.findViewById(R.id.social_media_ll)
+        val mailFL: FrameLayout = itemView.findViewById(R.id.mail_fl)
+        val callFL: FrameLayout = itemView.findViewById(R.id.call_fl)
+        val locationFL: FrameLayout = itemView.findViewById(R.id.location_fl)
+
     }
+
 }

@@ -7,27 +7,38 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
 
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"
-        android:requestLegacyExternalStorage="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LocalFoxPartner"
         tools:targetApi="31">
         <activity
-            android:name="com.localfox.partner.ui.ProfilePhotoActivity"
-            android:theme="@style/Theme.LocalFoxPartner.NoActionBar"
-            android:exported="false">
+            android:name="com.localfox.partner.ui.AccountInActiveActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.LocalFoxPartner.NoActionBar">
+
         </activity>
+        <activity
+            android:name="com.localfox.partner.ui.ProfilePhotoActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.LocalFoxPartner.NoActionBar"></activity>
         <activity
             android:name="com.localfox.partner.ui.AccountCreatedActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
@@ -36,6 +47,7 @@
         <activity
             android:name="com.localfox.partner.ui.PasswordEntryActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
@@ -44,6 +56,7 @@
         <activity
             android:name="com.localfox.partner.ui.EmailVerificationActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
@@ -52,6 +65,7 @@
         <activity
             android:name="com.localfox.partner.ui.SignUpEmailActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
@@ -60,6 +74,7 @@
         <activity
             android:name="com.localfox.partner.ui.MobileNumberVerificationActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
@@ -68,6 +83,7 @@
         <activity
             android:name="com.localfox.partner.ui.SignUpMobileNumberActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
@@ -76,6 +92,7 @@
         <activity
             android:name="com.localfox.partner.ui.CreateAccountActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
@@ -84,40 +101,47 @@
         <activity
             android:name="com.localfox.partner.ui.LoginActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar" />
         <activity
             android:name="com.localfox.partner.ui.PasswordChangedActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar" />
         <activity
             android:name="com.localfox.partner.ui.PasswordResetActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar" />
         <activity
             android:name="com.localfox.partner.ui.NotificationActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar" />
         <activity
             android:name="com.localfox.partner.ui.InvitationActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar" />
         <activity
             android:name="com.localfox.partner.ui.SecurityActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar" />
-
         <activity
             android:name="com.localfox.partner.ui.JobDetailsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar" />
-
         <activity
             android:name="com.localfox.partner.ui.ProfileSettingsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar" />
         <activity
             android:name="com.localfox.partner.ui.SplashActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -128,11 +152,37 @@
         <activity
             android:name="com.localfox.partner.ui.HomeActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.LocalFoxPartner.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <service
+            android:name="com.localfox.partner.app.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!--
+ Set custom default icon. This is used when no icon is set for incoming notification messages.
+See README(https://goo.gl/l4GJaQ) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/logo_new" />
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
     </application>
 
 </manifest>

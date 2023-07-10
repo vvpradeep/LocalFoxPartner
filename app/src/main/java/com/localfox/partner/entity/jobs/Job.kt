@@ -8,11 +8,11 @@ data class Job (
 
   @SerializedName("location"                  ) var location                  : Location?         = Location(),
   @SerializedName("_id"                       ) var Id                        : String?           = null,
-  @SerializedName("customer"                  ) var customer                  : String?           = null,
+  //@SerializedName("customer"                  ) var customer                  : Customer?          = Customer(),
   @SerializedName("partners"                  ) var partners                  : ArrayList<String> = arrayListOf(),
   @SerializedName("description"               ) var description               : String?           = null,
   @SerializedName("type"                      ) var type                      : String?           = null,
-  @SerializedName("category"                  ) var category                  : String?           = null,
+  @SerializedName("category"                  ) var category                  : Category?          = Category(),
   @SerializedName("service"                   ) var service                   : Service?          = Service(),
   @SerializedName("urgency"                   ) var urgency                   : String?           = null,
   @SerializedName("images"                    ) var images                    : ArrayList<String> = arrayListOf(),

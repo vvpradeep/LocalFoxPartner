@@ -82,7 +82,7 @@ class PasswordEntryActivity : AppCompatActivity() {
                         response: Response<ResponseBody>?
                     ) {
                         binding.progressCircular.setVisibility(View.GONE)
-                        if (response!!.isSuccessful && response!!.body() != null) {
+                        if (response!!.isSuccessful) {
                             val intent = Intent(
                                 this@PasswordEntryActivity,
                                 AccountCreatedActivity::class.java
@@ -90,13 +90,15 @@ class PasswordEntryActivity : AppCompatActivity() {
                             //intent.putExtra("registrartionEntity", registrartionEntity)
                             startActivity(intent)
                         } else {
-                            MyApplication.applicationContext().showInvalidErrorToast()
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val error: String = jsonObject.getString("error")
+                            MyApplication.applicationContext().showErrorToast(""+ error)
                         }
                     }
 
                     override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
                         binding.progressCircular.setVisibility(View.GONE)
-                        MyApplication.applicationContext().showInvalidErrorToast()
+                        MyApplication.applicationContext().showErrorToast(""+ t!!.message)
                         Log.d("response", "onFailure ")
 
                     }

@@ -25,7 +25,7 @@
                 android:id="@+id/profile_image"
                 android:layout_width="43dp"
                 android:layout_height="41dp"
-                android:background="@drawable/imagep"></ImageView>
+                android:src="@drawable/imagep"></ImageView>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,7 +38,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_semibold"
-                    android:text="Menor Phill"
                     android:textColor="#475569"
                     android:textSize="16sp"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -51,9 +50,9 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/ic_location_icon"
                     android:fontFamily="@font/inter_regular"
-                    android:text="Marsden Park, NSW 2765"
                     android:textColor="#64748B"
                     android:textSize="12sp"
+                    android:layout_marginTop="10dp"
                     android:drawablePadding="5dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -64,9 +63,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_regular"
-                    android:text="Posted on 21 Jan 2022 11:45 PM"
                     android:textColor="#94A3B8"
                     android:textSize="12sp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="18dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -78,6 +77,7 @@
 
 
         <LinearLayout
+            android:id="@+id/social_media_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -94,13 +94,14 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="invisible"
                     android:background="@drawable/status_round_corner_bg"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/quoted_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:background="#1AB34DE2"
                         android:fontFamily="@font/inter_medium"
                         android:padding="5dp"
@@ -121,7 +122,8 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <LinearLayout
+                <FrameLayout
+                    android:id="@+id/location_fl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/location_round_corner_bg"
@@ -132,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:padding="10dp"
                         android:src="@drawable/icon_location_search"></ImageView>
-                </LinearLayout>
+                </FrameLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -144,6 +146,7 @@
                 android:orientation="horizontal">
 
                 <FrameLayout
+                    android:id="@+id/mail_fl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/mail_round_corner_bg"
@@ -166,6 +169,7 @@
                 android:orientation="horizontal">
 
                 <FrameLayout
+                    android:id="@+id/call_fl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/call_round_corner_bg"

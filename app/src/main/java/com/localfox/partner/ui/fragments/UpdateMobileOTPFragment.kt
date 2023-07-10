@@ -1,14 +1,18 @@
 package com.localfox.partner.ui.fragments
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -54,6 +58,36 @@ class UpdateMobileOTPFragment : BottomSheetDialogFragment() {
         return _binding.root
     }
 
+    private val otpReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            // Retrieve the OTP from the intent
+            val otp = intent.getStringExtra("otp")
+
+            // Use the OTP as needed
+            if (otp != null) {
+                // Display the OTP in a TextView
+
+                _binding.otpEt.setText(otp)
+
+                // Perform other operations with the OTP
+                // ...
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Register the broadcast receiver with the appropriate intent filter
+        val filter = IntentFilter("com.example.OTP_RECEIVED")
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(otpReceiver, filter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Unregister the broadcast receiver when the activity is paused
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(otpReceiver)
+    }
+
     fun sendmobileNumberOTP(otp: String,
         binding: FragmentUpdateMobileOtpNumberBinding) {
         try {
@@ -77,7 +111,9 @@ class UpdateMobileOTPFragment : BottomSheetDialogFragment() {
                             var mobileVerification = response.body() as MobileVerificationEntity
                             sendmobileNumber(getArguments()?.getString("mobileNumber", "").toString() , mobileVerification!!.mobileVerificationReference.toString(), binding )
                         } else {
-                            MyApplication.applicationContext().showInvalidErrorToast()
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val error: String = jsonObject.getString("error")
+                            MyApplication.applicationContext().showErrorToast(""+ error)
                         }
                     }
 
@@ -118,8 +154,16 @@ class UpdateMobileOTPFragment : BottomSheetDialogFragment() {
                             MyApplication.applicationContext().showSuccessToast("Mobile number updated successfully")
                             if (dialog != null)
                                 dialog!!.dismiss()
+                            requireActivity().setResult(Activity.RESULT_OK)
+                            requireActivity().finish()
                         } else {
-                            MyApplication.applicationContext().showInvalidErrorToast()
+                            if (response!!.code() == MyApplication.applicationContext().SESSION) {
+                                MyApplication.applicationContext().sessionSignIn()
+                            } else {
+                                val jsonObject = JSONObject(response.errorBody()?.string())
+                                val error: String = jsonObject.getString("error")
+                                MyApplication.applicationContext().showErrorToast(""+ error)
+                            }
                         }
                     }
 

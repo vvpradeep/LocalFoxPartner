@@ -11,6 +11,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.ui.AppBarConfiguration
 import com.google.gson.Gson
+import com.localfox.partner.R
 import com.localfox.partner.app.ApiUtils
 import com.localfox.partner.app.MyApplication
 import com.localfox.partner.databinding.ActivityInvitationBinding
@@ -18,7 +19,9 @@ import com.localfox.partner.databinding.ActivitySplashBinding
 import com.localfox.partner.databinding.FragmentLeadsBinding
 import com.localfox.partner.entity.JobInviations
 import com.localfox.partner.entity.JobsList
+import com.localfox.partner.ui.adapter.ImagesGridAdapter
 import com.localfox.partner.ui.adapter.JobsAdapter
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,6 +51,7 @@ class InvitationActivity : AppCompatActivity() {
 
         binding.closeButton.setOnClickListener {
             finish()
+
         }
 
         binding.acceptTv.setOnClickListener {
@@ -65,6 +69,15 @@ class InvitationActivity : AppCompatActivity() {
 
         binding.desTv.text = jobsData!!.job!!.description
 
+
+
+        if (jobsData.job!!.images != null && jobsData.job!!.images.size > 0) {
+            binding.photoGrid.adapter = ImagesGridAdapter(this,jobsData.job!!.images);
+            binding.photoGrid.isExpanded= true;
+        } else {
+            binding.photoGrid.visibility = View.GONE
+            binding.noPhotosAddTv.visibility = View.VISIBLE
+        }
     }
 
 
@@ -85,8 +98,15 @@ class InvitationActivity : AppCompatActivity() {
                         val gson = Gson()
                         val json = gson.toJson(response.body()) //
                         finish();
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_in_right)
                     } else {
-                        MyApplication.applicationContext().showInvalidErrorToast()
+                        if (response.code() == MyApplication.applicationContext().SESSION) {
+                            MyApplication.applicationContext().sessionSignIn()
+                        } else {
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val error: String = jsonObject.getString("error")
+                            MyApplication.applicationContext().showErrorToast(""+ error)
+                        }
                     }
                 }
 
@@ -120,8 +140,15 @@ class InvitationActivity : AppCompatActivity() {
                         val gson = Gson()
                         val json = gson.toJson(response.body()) //
                         finish();
+                        overridePendingTransition(0, R.anim.slide_in_right_left_open)
                     } else {
-                        MyApplication.applicationContext().showInvalidErrorToast()
+                        if (response.code() == MyApplication.applicationContext().SESSION) {
+                            MyApplication.applicationContext().sessionSignIn()
+                        } else {
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val error: String = jsonObject.getString("error")
+                            MyApplication.applicationContext().showErrorToast(""+ error)
+                        }
                     }
                 }
 
@@ -137,5 +164,11 @@ class InvitationActivity : AppCompatActivity() {
         }
     }
 
+//    override fun finish() {
+//        super.finish()
+//       // overridePendingTransition(R.anim.slide_in_left, R.anim.slide_in_right)
+//        overridePendingTransition(0, R.anim.slide_in_right_left_open)
+//
+//    }
 
 }

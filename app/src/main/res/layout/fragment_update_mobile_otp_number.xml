@@ -94,13 +94,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
+                android:lines="1"
                 android:background="@null"
                 android:fontFamily="@font/inter_medium"
                 android:gravity="center_vertical"
                 android:inputType="number"
-                android:padding="14dp"
-                android:textColor="#475569"
-                android:textSize="18sp"></EditText>
+                android:padding="12dp"
+                android:textSize="16dp"
+                android:textColor="#475569"></EditText>
         </LinearLayout>
 
 
@@ -113,6 +114,7 @@
             android:background="@drawable/login_round_corner_bg"
             android:fontFamily="@font/inter_semibold"
             android:padding="12dp"
+            android:textSize="16dp"
             android:text="Next"
             android:textAllCaps="false"
             android:textColor="@color/white"

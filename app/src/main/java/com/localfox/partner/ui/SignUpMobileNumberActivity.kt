@@ -56,10 +56,8 @@ class SignUpMobileNumberActivity : AppCompatActivity() {
 
         binding.nextButton.setOnClickListener {
             if (!binding.mobileEt.text.toString()
-                    .isNullOrBlank() && (binding.mobileEt.text.toString().length == 9 || binding.mobileEt.text.toString().length == 10)
-            )
-
-                sendmobileNumber(
+                    .isNullOrBlank() && ((binding.mobileEt.text.toString().startsWith("4", true) && binding.mobileEt.text.toString().length == 9) || (binding.mobileEt.text.toString().startsWith("04", true) && binding.mobileEt.text.toString().length == 10))
+            ) sendmobileNumber(
                     registrartionEntity.firstName!!,
                     binding.mobileEt.text.toString(),
                     binding,
@@ -93,7 +91,7 @@ class SignUpMobileNumberActivity : AppCompatActivity() {
                         response: Response<ResponseBody>?
                     ) {
                         binding.progressCircular.setVisibility(View.GONE)
-                        if (response!!.isSuccessful && response!!.body() != null) {
+                        if (response!!.isSuccessful) {
                             val intent = Intent(
                                 this@SignUpMobileNumberActivity,
                                 MobileNumberVerificationActivity::class.java
@@ -102,13 +100,15 @@ class SignUpMobileNumberActivity : AppCompatActivity() {
                             intent.putExtra("registrartionEntity", registrartionEntity)
                             startActivity(intent)
                         } else {
-                            MyApplication.applicationContext().showInvalidErrorToast()
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val error: String = jsonObject.getString("error")
+                            MyApplication.applicationContext().showErrorToast(""+ error)
                         }
                     }
 
                     override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
                         binding.progressCircular.setVisibility(View.GONE)
-                        MyApplication.applicationContext().showInvalidErrorToast()
+                        MyApplication.applicationContext().showErrorToast(""+ t!!.message)
                         Log.d("response", "onFailure ")
 
                     }

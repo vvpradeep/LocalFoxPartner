@@ -8,12 +8,20 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
+import android.util.TypedValue
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +31,10 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.localfox.partner.R
 import com.localfox.partner.app.ApiUtils
+import com.localfox.partner.app.AppUtils
+import com.localfox.partner.app.LetterDrawable
 import com.localfox.partner.app.MyApplication
+import com.localfox.partner.databinding.ActivityLoginBinding
 import com.localfox.partner.databinding.FragmentProfileBinding
 import com.localfox.partner.entity.profile.ProfileEntity
 import com.localfox.partner.ui.*
@@ -54,10 +65,13 @@ class ProfileFragment : Fragment() {
         //image pick code
         private val IMAGE_PICK_CODE = 1000
 
+
         //Permission code
         private val GALARY_PERMISSION_CODE = 1001
         private val CAMERA_PERMISSION_CODE = 1002
         private val CAMERA_PICK_CODE = 1003
+
+        private val PROFILE_PICK_CODE = 1004
 
         //1000 * 1024 = 2 MB
         private const val MAX_IMAGE_SIZE = 1024000
@@ -99,11 +113,20 @@ class ProfileFragment : Fragment() {
 
         binding.profileSettingsLl.setOnClickListener() {
             val intent = Intent(requireActivity(), ProfileSettingsActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent,PROFILE_PICK_CODE)
         }
 
         binding.logoffTv.setOnClickListener {
             logoutDialog()
+        }
+
+        binding.profilePrivacySettingsLl.setOnClickListener() {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://localfox.com.au/partner/privacy"))
+            startActivity(intent)
+        }
+        binding.profileTCLl.setOnClickListener() {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://localfox.com.au/partner/terms"))
+            startActivity(intent)
         }
         setData()
 
@@ -127,19 +150,24 @@ class ProfileFragment : Fragment() {
             selectImage(profileData.data!!.profilePhoto.toString())
         }
 
-        if (TextUtils.isEmpty(imagePath))
-            Glide.with(requireContext())
-                .load(profileData.data?.profilePhoto)
-                .into(binding.profileImage)
-        else {
+        if (TextUtils.isEmpty(imagePath)) {
+            if (profileData.data?.profilePhoto != null && !profileData.data?.profilePhoto.toString().contains("no-photo")) {
+                Glide.with(requireContext())
+                    .load(profileData.data?.profilePhoto)
+                    .fitCenter()
+                    .into(binding.profileImage)
+            } else {
+                Glide.with(requireContext())
+                    .load(LetterDrawable(profileData.data?.firstName!!.get(0) + " "+ profileData.data?.lastName!!.get(0), requireContext().applicationContext))
+                    .into(binding.profileImage)
+            }
+        } else {
             binding.profileImage?.setImageURI(Uri.parse(imagePath))
         }
-
-        binding.nameTv.setText(profileData.data?.firstName)
-        binding.roleTv.setText(profileData.data?.role);
+        binding.nameTv.setText(profileData.data?.firstName + " "+ profileData.data?.lastName)
+//        binding.roleTv.setText(profileData.data?.role)
+        binding.roleTv.setText(profileData.data?.emailAddress)
         binding.addressTv.setText(profileData.data?.address)
-
-
     }
 
     fun logoutDialog() {
@@ -200,7 +228,12 @@ class ProfileFragment : Fragment() {
                         if (response!!.isSuccessful) {
 
                         } else {
+                            if (response!!.code() == MyApplication.applicationContext().SESSION) {
+                                MyApplication.applicationContext().sessionSignIn()
+                                Log.d("res", "res")
+                            } else {
 
+                            }
                         }
                     }
 
@@ -365,6 +398,8 @@ class ProfileFragment : Fragment() {
 
             requireActivity().runOnUiThread { binding.profileImage.setImageURI(mUri) }
             addProfilePhoto()
+        } else if (resultCode == Activity.RESULT_OK && requestCode == PROFILE_PICK_CODE) {
+            getProfile(binding)
         }
     }
 
@@ -379,6 +414,50 @@ class ProfileFragment : Fragment() {
         cursor.close()
         return s
     }
+
+    fun getProfile(binding: FragmentProfileBinding) {
+        binding.progressCircular.setVisibility(View.VISIBLE)
+        try {
+
+            var headers = mutableMapOf<String, String>()
+            headers["Content-Type"] = "application/json"
+            headers["Authorization"] = "Bearer " + MyApplication.applicationContext().getUserToken()
+
+            val call: Call<ProfileEntity> = ApiUtils.apiService.getProfile(headers)
+            call.enqueue(
+                object : Callback<ProfileEntity> {
+                    override fun onResponse(
+                        call: Call<ProfileEntity>?,
+                        response: Response<ProfileEntity>?
+                    ) {
+                        binding.progressCircular.setVisibility(View.GONE)
+                        if (response!!.isSuccessful && response!!.body() != null) {
+                            val gson = Gson()
+                            val json = gson.toJson(response.body()) //
+                            MyApplication.applicationContext().getAPP(requireActivity())
+                            MyApplication.applicationContext().saveStringPrefsData(json,MyApplication.applicationContext().PROFILE_DATA)
+                            MyApplication.applicationContext().saveNotificationsData(response.body()!!.data!!.NotificationSettings!!)
+                        }
+                        else{ if (response.code() == MyApplication.applicationContext().SESSION) {
+                            MyApplication.applicationContext().sessionSignIn()
+                        } else {
+                            MyApplication.applicationContext().showInvalidErrorToast()
+                        }
+                        }
+                    }
+                    override fun onFailure(call: Call<ProfileEntity>?, t: Throwable?) {
+                        binding.progressCircular.setVisibility(View.GONE)
+                        MyApplication.applicationContext().showInvalidErrorToast()
+                        Log.d("response", "onFailure ")
+
+                    }
+                })
+        } catch (e: Exception) {
+            binding.progressCircular.setVisibility(View.GONE)
+            Log.d("response", "Exception " + e.printStackTrace())
+        }
+    }
+
 
     fun addProfilePhoto() {
         try {
@@ -428,7 +507,7 @@ class ProfileFragment : Fragment() {
                             imagePath = ""
                             try {
                                 if (response.code() == MyApplication.applicationContext().SESSION) {
-                                    // MyApplication.applicationContext().sessionSignIn()
+                                     MyApplication.applicationContext().sessionSignIn()
                                 } else {
                                     val jObjError = JSONObject(response.errorBody()?.string())
                                     MyApplication.applicationContext()

@@ -1,21 +1,23 @@
 package com.localfox.partner.ui.fragments
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.localfox.partner.databinding.FragmentSearchBinding
 import com.localfox.partner.entity.Jobs
@@ -37,6 +39,17 @@ class SearchFragment : Fragment(), JobsAdapter.OnItemClickListener  {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
+
+        _binding.root.viewTreeObserver.addOnGlobalFocusChangeListener { _, newFocus ->
+            if (newFocus ==  _binding.root) {
+                // Fragment has gained focus
+                showKeyboard()
+            } else {
+                // Fragment has lost focus
+                dismissKeyboard()
+            }
+        }
+
 
         // this creates a vertical layout Manager
         _binding.jobsRecyclerview.layoutManager = LinearLayoutManager(activity)
@@ -67,7 +80,38 @@ class SearchFragment : Fragment(), JobsAdapter.OnItemClickListener  {
             adapter = JobsAdapter(activity.jobsList, requireContext()!!, this, true)
             _binding.jobsRecyclerview.adapter = adapter
         }
+
+        binding.searchEt.requestFocus()
+        showKeyboard(binding.searchEt)
         super.onResume()
+    }
+    override fun onPause() {
+        super.onPause()
+        dismissKeyboard()
+    }
+
+    private fun showKeyboard() {
+        val view = view // Get the fragment's root view
+        if (view != null) {
+         var inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+        }
+    }
+
+    private fun showKeyboard(editText: EditText) {
+        val inputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    private fun dismissKeyboard() {
+        val view = view // Get the fragment's root view
+        if (view != null) {
+           var inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
     override fun onRequestPermissionsResult(

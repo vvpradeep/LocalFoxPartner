@@ -67,7 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@color/white"
+                    android:background="@drawable/white_round_corner_bg"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
                     android:padding="20dp"
@@ -95,7 +95,7 @@
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@+id/location_icon"
                         app:layout_constraintLeft_toRightOf="@+id/location_icon"
-                        app:layout_constraintStart_toStartOf="@+id/location_icon"></TextView>
+                        app:layout_constraintTop_toTopOf="@+id/location_icon"></TextView>
 
                     <TextView
                         android:id="@+id/address_des_tv"
@@ -115,7 +115,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@color/white"
+                    android:background="@drawable/white_round_corner_bg"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
                     android:padding="20dp"
@@ -165,7 +165,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@color/white"
+                    android:background="@drawable/white_round_corner_bg"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
                     android:padding="20dp"
@@ -193,7 +193,7 @@
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@+id/des_icon"
                         app:layout_constraintLeft_toRightOf="@+id/des_icon"
-                        app:layout_constraintStart_toStartOf="@+id/des_icon"></TextView>
+                        app:layout_constraintTop_toTopOf="@+id/des_icon"></TextView>
 
                     <TextView
                         android:id="@+id/des_tv"
@@ -215,7 +215,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@color/white"
+                    android:background="@drawable/white_round_corner_bg"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
                     android:padding="20dp">
@@ -249,6 +249,7 @@
                         android:fontFamily="@font/inter_regular"
                         android:text="Photos not added yet"
                         android:textSize="14sp"
+                        android:textColor="#64748B"
                         android:visibility="gone"
                         app:layout_constraintStart_toStartOf="@+id/job_photo_tv"
                         app:layout_constraintTop_toBottomOf="@id/job_photo_tv"></TextView>

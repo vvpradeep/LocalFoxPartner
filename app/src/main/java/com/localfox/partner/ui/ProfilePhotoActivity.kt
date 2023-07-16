@@ -7,6 +7,9 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.WindowManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.localfox.partner.R
 import com.localfox.partner.databinding.ActivityProfilePhotoBinding
 import com.localfox.partner.databinding.ActivitySecurityBinding
@@ -33,16 +36,18 @@ class ProfilePhotoActivity : AppCompatActivity() {
             finish()
         }
 
+        val transformation = MultiTransformation(CenterCrop(), RoundedCorners(40))
+
         if (!TextUtils.isEmpty(intent.getStringExtra("id"))) {
             if (!intent.getBooleanExtra("islocal", false))
                 Glide.with(this)
                     .load(intent.getStringExtra("id"))
-                    .fitCenter()
+                    .transform(transformation)
                     .into(binding.profileImage)
             else
                 Glide.with(this)
                     .load(Uri.parse(intent.getStringExtra("id")))
-                    .centerCrop()
+                    .transform(transformation)
                     .into(binding.profileImage!!)
         }
 

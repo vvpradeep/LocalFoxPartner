@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "337822425259",
+    "project_id": "local-fox-firebase",
+    "storage_bucket": "local-fox-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337822425259:android:f21da1cf091a30ae1d57ee",
+        "android_client_info": {
+          "package_name": "com.localfox.partner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337822425259-7l4smh0ch09du9iovomn8jdd38ujfp5u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.localfox.partner",
+            "certificate_hash": "576443d34b9766c96a7766022ebe536b8e58fde0"
+          }
+        },
+        {
+          "client_id": "337822425259-mo22vha84e69v1de6cc0032vtiptqjm2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsjdjLBVZrvmk-EXqFw5jKPN5g_I0txMw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337822425259-mo22vha84e69v1de6cc0032vtiptqjm2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "337822425259-10bq76ese355ej6d14fmr6l9mmj30020.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.localfox.localfoxpartner"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

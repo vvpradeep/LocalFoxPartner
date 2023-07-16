@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.FirebaseApp
 import com.google.gson.Gson
 import com.localfox.partner.app.ApiUtils
 import com.localfox.partner.app.MyApplication
@@ -25,6 +26,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)

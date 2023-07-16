@@ -1,10 +1,19 @@
 package com.localfox.partner.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.view.View
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.localfox.partner.R
 import com.localfox.partner.databinding.ActivityCreateAccountBinding
 import com.localfox.partner.entity.RegistrartionEntity
 
@@ -47,5 +56,44 @@ class CreateAccountActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+        setupClickableTextView(binding.termsAndConditionsTv)
     }
+
+    fun setupClickableTextView(textView: TextView) {
+        val fullText = resources.getText(R.string.terms_and_conditions);
+
+        val spannableString = SpannableString(fullText)
+
+        val clickablePart1 = "Terms"
+        val clickablePart2 = "Conditions of use"
+
+        val clickableSpan1 = object : ClickableSpan() {
+            override fun onClick(view: View) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://localfox.com.au/partner/terms"))
+                startActivity(intent)
+            }
+        }
+
+        val clickableSpan2 = object : ClickableSpan() {
+            override fun onClick(view: View) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://localfox.com.au/partner/privacy"))
+                startActivity(intent)
+            }
+        }
+
+        val startIndex1 = fullText.indexOf(clickablePart1)
+        val endIndex1 = startIndex1 + clickablePart1.length
+
+        val startIndex2 = fullText.indexOf(clickablePart2)
+        val endIndex2 = startIndex2 + clickablePart2.length
+
+        spannableString.setSpan(clickableSpan1, startIndex1, endIndex1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(ForegroundColorSpan(resources.getColor(R.color.red)), startIndex1, endIndex1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(clickableSpan2, startIndex2, endIndex2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(ForegroundColorSpan(resources.getColor(R.color.red)), startIndex2, endIndex2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        textView.text = spannableString
+        textView.movementMethod = LinkMovementMethod.getInstance()
+    }
+
 }

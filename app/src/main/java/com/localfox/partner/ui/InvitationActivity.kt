@@ -97,22 +97,27 @@ class InvitationActivity : AppCompatActivity() {
                     if (response!!.isSuccessful && response!!.body() != null) {
                         val gson = Gson()
                         val json = gson.toJson(response.body()) //
+                        MyApplication.applicationContext().showSuccessToast("Invitation Accepted successfully")
                         finish();
                         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_in_right)
                     } else {
                         if (response.code() == MyApplication.applicationContext().SESSION) {
                             MyApplication.applicationContext().sessionSignIn()
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val error: String = jsonObject.getString("error")
+                            MyApplication.applicationContext().showErrorToast(""+ error)
                         } else {
                             val jsonObject = JSONObject(response.errorBody()?.string())
                             val error: String = jsonObject.getString("error")
                             MyApplication.applicationContext().showErrorToast(""+ error)
                         }
+                        finish();
                     }
                 }
 
                 override fun onFailure(call: Call<JobsList>?, t: Throwable?) {
                     binding.progressCircular.setVisibility(View.GONE)
-                    MyApplication.applicationContext().showInvalidErrorToast()
+                    MyApplication.applicationContext().showErrorToast(t!!.localizedMessage)
                     Log.d("response", "onFailure ")
                 }
             })
@@ -139,22 +144,27 @@ class InvitationActivity : AppCompatActivity() {
                     if (response!!.isSuccessful && response!!.body() != null) {
                         val gson = Gson()
                         val json = gson.toJson(response.body()) //
+                        MyApplication.applicationContext().showSuccessToast("Invitation Rejected successfully")
                         finish();
                         overridePendingTransition(0, R.anim.slide_in_right_left_open)
                     } else {
                         if (response.code() == MyApplication.applicationContext().SESSION) {
                             MyApplication.applicationContext().sessionSignIn()
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val error: String = jsonObject.getString("error")
+                            MyApplication.applicationContext().showErrorToast(""+ error)
                         } else {
                             val jsonObject = JSONObject(response.errorBody()?.string())
                             val error: String = jsonObject.getString("error")
                             MyApplication.applicationContext().showErrorToast(""+ error)
                         }
+                        finish();
                     }
                 }
 
                 override fun onFailure(call: Call<JobsList>?, t: Throwable?) {
                     binding.progressCircular.setVisibility(View.GONE)
-                    MyApplication.applicationContext().showInvalidErrorToast()
+                    MyApplication.applicationContext().showErrorToast(t!!.localizedMessage)
                     Log.d("response", "onFailure ")
                 }
             })

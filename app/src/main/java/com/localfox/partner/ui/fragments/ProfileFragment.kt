@@ -166,7 +166,7 @@ class ProfileFragment : Fragment() {
         }
         binding.nameTv.setText(profileData.data?.firstName + " "+ profileData.data?.lastName)
 //        binding.roleTv.setText(profileData.data?.role)
-        binding.roleTv.setText(profileData.data?.emailAddress)
+        binding.emailTv.setText(profileData.data?.emailAddress)
         binding.addressTv.setText(profileData.data?.address)
     }
 

@@ -55,13 +55,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@color/white"
+                    android:background="@drawable/white_round_corner_bg"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
-                    android:padding="20dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/invitation_tv">
+                    android:padding="20dp">
 
                     <ImageView
                         android:id="@+id/location_icon"
@@ -104,13 +101,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@color/white"
+                    android:background="@drawable/white_round_corner_bg"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
-                    android:padding="20dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/location_ll">
+                    android:padding="20dp">
 
                     <ImageView
                         android:id="@+id/time_icon"
@@ -132,7 +126,7 @@
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@+id/time_icon"
                         app:layout_constraintLeft_toRightOf="@+id/time_icon"
-                        app:layout_constraintStart_toStartOf="@+id/time_icon"></TextView>
+                        app:layout_constraintTop_toTopOf="@+id/time_icon"></TextView>
 
                     <TextView
                         android:id="@+id/time_tv"
@@ -154,13 +148,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@color/white"
+                    android:background="@drawable/white_round_corner_bg"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
-                    android:padding="20dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/time_ll">
+                    android:padding="20dp">
 
                     <ImageView
                         android:id="@+id/des_icon"
@@ -182,7 +173,7 @@
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@+id/des_icon"
                         app:layout_constraintLeft_toRightOf="@+id/des_icon"
-                        app:layout_constraintStart_toStartOf="@+id/des_icon"></TextView>
+                        app:layout_constraintTop_toTopOf="@+id/des_icon"></TextView>
 
                     <TextView
                         android:id="@+id/des_tv"
@@ -204,13 +195,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@color/white"
+                    android:background="@drawable/white_round_corner_bg"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
-                    android:padding="20dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/des_ll">
+                    android:padding="20dp">
 
                     <ImageView
                         android:id="@+id/photo_icon"
@@ -224,7 +212,7 @@
                         android:id="@+id/job_photo_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginLeft="10dp"
                         android:fontFamily="@font/inter_semibold"
                         android:gravity="center_vertical"
                         android:text="Photos"
@@ -232,7 +220,7 @@
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@+id/photo_icon"
                         app:layout_constraintLeft_toRightOf="@+id/photo_icon"
-                        app:layout_constraintStart_toStartOf="@+id/photo_icon"></TextView>
+                        app:layout_constraintTop_toTopOf="@+id/photo_icon"></TextView>
 
                     <TextView
                         android:id="@+id/no_photos_add_tv"
@@ -241,6 +229,7 @@
                         android:fontFamily="@font/inter_regular"
                         android:text="Photos not added yet"
                         android:textSize="14sp"
+                        android:textColor="#64748B"
                         android:visibility="gone"
                         app:layout_constraintStart_toStartOf="@+id/job_photo_tv"
                         app:layout_constraintTop_toBottomOf="@id/job_photo_tv"></TextView>
@@ -272,7 +261,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:background="@color/white"
+        android:background="@drawable/white_round_corner_bg"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         android:padding="20dp"

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.Toast
+import com.google.firebase.FirebaseApp
 import com.google.gson.Gson
 import com.localfox.partner.R
 import com.localfox.partner.app.ApiUtils.apiService
@@ -55,6 +56,7 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        FirebaseApp.initializeApp(this)
     }
 
     fun getAPP(context: Context): MyApplication? {

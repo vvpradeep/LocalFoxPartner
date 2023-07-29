@@ -17,7 +17,7 @@ class LetterDrawable(private val letter: String, val context: Context) : Drawabl
     }
     private val textPaint = Paint().apply {
         style = Paint.Style.FILL
-        color = Color.parseColor("#94A3B8")
+        color = Color.parseColor("#475569")
         textSize = 48f
         typeface = customFont
         textAlign = Paint.Align.CENTER

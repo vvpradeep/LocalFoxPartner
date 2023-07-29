@@ -39,9 +39,7 @@ class MobileNumberVerificationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMobileNumberVerificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val smsFilter = IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION).also {
-            registerReceiver(receiver, it)
-        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
@@ -67,8 +65,18 @@ class MobileNumberVerificationActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION).also {
+            registerReceiver(receiver, it)
+        }
+    }
     override fun onStop() {
-        unregisterReceiver(receiver)
+        try {
+            unregisterReceiver(receiver)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace();
+        }
         super.onStop()
     }
 
@@ -99,7 +107,12 @@ class MobileNumberVerificationActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         // Unregister the broadcast receiver when the activity is paused
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(otpReceiver)
+        try {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(otpReceiver)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace();
+        }
+
     }
 
     fun sendmobileNumberOTP(

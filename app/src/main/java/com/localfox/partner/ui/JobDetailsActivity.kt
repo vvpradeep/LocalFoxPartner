@@ -9,9 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.localfox.partner.app.LetterDrawable
@@ -19,12 +17,15 @@ import com.localfox.partner.app.MyApplication
 import com.localfox.partner.databinding.ActivityJobDetailsBinding
 import com.localfox.partner.entity.Jobs
 import com.localfox.partner.ui.adapter.ImagesGridAdapter
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.localfox.partner.R
 
 class JobDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityJobDetailsBinding
     private val CALL_PERMISSION_REQUEST_CODE = 1010
     var phoneNumber: String = "";
+    public var isDimensionApplied  = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +53,10 @@ class JobDetailsActivity : AppCompatActivity() {
 
         var address = job.location
         binding.includedLl.nameTv.text =job.customer!!.fullName
-        binding.includedLl.addressTv.text = address!!.suburb + " " + address!!.state + " "+address!!.postCode
+        var locationString =  address!!.streetNumber + " " +  address!!.streetName +" \n" +
+                address!!.suburb + " " + address!!.state + " "+address!!.postCode
+
+        binding.includedLl.addressTv.text =  locationString.toString()
 
         binding.includedLl.dateTv.text =  MyApplication.applicationContext().formatDate(job.createdDate)
 
@@ -135,6 +139,25 @@ class JobDetailsActivity : AppCompatActivity() {
         } else {
             makePhoneCall(phoneNumber)
         }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        if (!isDimensionApplied) {
+            isDimensionApplied = true;
+            var lMain: ConstraintLayout = findViewById(R.id.parent_ll);
+            lMain.getLayoutParams().height = lMain.getHeight() - getNavigationBarHeight();
+        }
+        super.onWindowFocusChanged(hasFocus)
+
+    }
+
+    fun getNavigationBarHeight(): Int {
+        var resources = getResources();
+        var resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            return resources.getDimensionPixelSize(resourceId);
+        }
+        return 0;
     }
 
     fun onMailClick(mailID: String) {

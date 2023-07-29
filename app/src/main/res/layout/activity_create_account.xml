@@ -118,7 +118,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/terms_and_conditions"
+        android:text="@string/terms_and_conditions_privacy"
         android:textColor="#94A3B8"
         android:gravity="center_horizontal"
         android:textSize="15sp"

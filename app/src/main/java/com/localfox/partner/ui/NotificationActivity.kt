@@ -92,8 +92,9 @@ class NotificationActivity : AppCompatActivity() {
                         call: Call<ResponseBody>?,
                         response: Response<ResponseBody>?
                     ) {
-                        binding.progressCircular.setVisibility(View.GONE)
+
                         if (response!!.isSuccessful && response!!.body() != null) {
+                            binding.progressCircular.setVisibility(View.GONE)
                             MyApplication.applicationContext().saveBolleanPrefsData( binding.pushSwitch.isChecked, "PushNotifications")
                             MyApplication.applicationContext().saveBolleanPrefsData( binding.smsSwitch.isChecked, "SmsNotifications")
                             MyApplication.applicationContext().saveBolleanPrefsData( binding.emailSwitch.isChecked, "EmailNotifications")
@@ -109,8 +110,15 @@ class NotificationActivity : AppCompatActivity() {
 
                         } else {
                             if (response!!.code() == MyApplication.applicationContext().SESSION) {
-                                MyApplication.applicationContext().sessionSignIn()
+                                MyApplication.applicationContext().sessionSignIn{ result ->
+                                    if (result) {
+                                        updateSettings()
+                                    } else {
+                                        binding.progressCircular.setVisibility(View.GONE)
+                                    }
+                                }
                             } else {
+                                binding.progressCircular.setVisibility(View.GONE)
                                 MyApplication.applicationContext().showInvalidErrorToast()
                             }
                         }

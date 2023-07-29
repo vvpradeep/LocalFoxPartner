@@ -58,17 +58,17 @@ interface APIInterface {
     @POST("/v1/partner/profile/uploadProfilePhoto")
     fun uploadProfilePhoto(@HeaderMap headers: Map<String, String>, @Part photo: MultipartBody.Part): Call<ResponseBody>
 
-    @PUT("/v1/partner/logout")
+    @POST("/v1/partner/logout")
     fun logout(@HeaderMap headers: Map<String, String>): Call<ResponseBody>
 
     @GET("/v1/partner/jobs/getJobs?")
     fun getJobs(@HeaderMap headers: Map<String, String>, @Query("pageNumber") pageNumber: Int,  @Query("pageSize") pageSize: Int): Call<JobsList>
 
     @POST("/v1/partner/jobs/acceptJob/{id}")
-    fun acceptJob(@HeaderMap headers: Map<String, String>, @Path("id") id: String): Call<JobsList>
+    fun acceptJob(@HeaderMap headers: Map<String, String>, @Path("id") id: String): Call<ResponseBody>
 
     @POST("/v1/partner/jobs/declineJob/{id}")
-    fun declineJob(@HeaderMap headers: Map<String, String>, @Path("id") id: String): Call<JobsList>
+    fun declineJob(@HeaderMap headers: Map<String, String>, @Path("id") id: String): Call<ResponseBody>
 
     @POST("/v1/partner/fcmToken/registerFcmToken")
     fun registerFcmToken(@Body request: RequestBody, @HeaderMap headers: Map<String, String>): Call<FCMResponse>

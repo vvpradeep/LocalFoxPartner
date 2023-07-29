@@ -1,6 +1,8 @@
 package com.localfox.partner.ui
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +15,8 @@ import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 
 import com.google.gson.Gson
 import com.localfox.partner.R
@@ -53,6 +57,7 @@ class LoginActivity : AppCompatActivity() {
             )
         }
 
+        askNotificationPermission()
         binding.forgotPasswordTv.setOnClickListener {
             val intent = Intent(this, SignUpEmailActivity::class.java)
             intent.putExtra("isSignUp", false)
@@ -119,8 +124,7 @@ class LoginActivity : AppCompatActivity() {
 
         val spannableString = SpannableString(fullText)
 
-        val clickablePart1 = "Terms"
-        val clickablePart2 = "Conditions of use"
+        val clickablePart1 = "Terms and Conditions of use"
 
         val clickableSpan1 = object : ClickableSpan() {
             override fun onClick(view: View) {
@@ -129,23 +133,23 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        val clickableSpan2 = object : ClickableSpan() {
-            override fun onClick(view: View) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://localfox.com.au/partner/privacy"))
-                startActivity(intent)
-            }
-        }
+//        val clickableSpan2 = object : ClickableSpan() {
+//            override fun onClick(view: View) {
+//                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://localfox.com.au/partner/privacy"))
+//                startActivity(intent)
+//            }
+//        }
 
         val startIndex1 = fullText.indexOf(clickablePart1)
         val endIndex1 = startIndex1 + clickablePart1.length
 
-        val startIndex2 = fullText.indexOf(clickablePart2)
-        val endIndex2 = startIndex2 + clickablePart2.length
+//        val startIndex2 = fullText.indexOf(clickablePart2)
+//        val endIndex2 = startIndex2 + clickablePart2.length
 
         spannableString.setSpan(clickableSpan1, startIndex1, endIndex1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         spannableString.setSpan(ForegroundColorSpan(resources.getColor(R.color.red)), startIndex1, endIndex1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        spannableString.setSpan(clickableSpan2, startIndex2, endIndex2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        spannableString.setSpan(ForegroundColorSpan(resources.getColor(R.color.red)), startIndex2, endIndex2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+       // spannableString.setSpan(clickableSpan2, startIndex2, endIndex2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+       // spannableString.setSpan(ForegroundColorSpan(resources.getColor(R.color.red)), startIndex2, endIndex2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         textView.text = spannableString
         textView.movementMethod = LinkMovementMethod.getInstance()
@@ -274,7 +278,11 @@ class LoginActivity : AppCompatActivity() {
                             startActivity(intent)
                         }
                         else{ if (response.code() == MyApplication.applicationContext().SESSION) {
-                            MyApplication.applicationContext().sessionSignIn()
+                            MyApplication.applicationContext().sessionSignIn{ result ->
+                                if (result) {
+                                    getProfile(binding)
+                                }
+                            }
                         } else {
                             MyApplication.applicationContext().showInvalidErrorToast()
                         }
@@ -309,7 +317,11 @@ class LoginActivity : AppCompatActivity() {
                         response: Response<ResponseBody>?
                     ) {
                         if (response!!.code() == MyApplication.applicationContext().SESSION) {
-                            MyApplication.applicationContext().sessionSignIn()
+                            MyApplication.applicationContext().sessionSignIn { result ->
+                                if (result) {
+                                    linkfcm()
+                                }
+                            }
                             Log.d("res", "res")
                         } else {
                             Log.d("res", "res")
@@ -325,6 +337,34 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Can post notifications.
+        } else {
+            askNotificationPermission()
+        }
+    }
+
+    private fun askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                // Can post notifications.
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                // Display an educational UI explaining to the user the features that will be enabled
+                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+                //       If the user selects "No thanks," allow the user to continue without notifications.
+            } else {
+                // Directly ask for the permission
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
 
 
 }

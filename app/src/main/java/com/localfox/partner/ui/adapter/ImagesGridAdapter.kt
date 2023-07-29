@@ -43,7 +43,7 @@ class ImagesGridAdapter(context: Context, items: List<String>) : BaseAdapter() {
         }
         val imageView: ImageView = view.findViewById(R.id.profile_image)
         Glide.with(context)
-            .load(items.get(position))
+            .load(getItem(position))
             .into(imageView)
 
         view.setOnClickListener {

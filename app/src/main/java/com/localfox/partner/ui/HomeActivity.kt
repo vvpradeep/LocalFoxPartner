@@ -38,7 +38,7 @@ class HomeActivity : AppCompatActivity() {
     public val _binding get() = binding
     public var jobsData1: JobsList? = null
     public  var pageNumber : Int = 1
-    public var pageSize : Int = 10
+    public var pageSize : Int = 1000
     public var jobsList : ArrayList<Jobs>  = arrayListOf()
     public var lastDataFetched  = false
     public var isDimensionApplied  = false
@@ -196,7 +196,11 @@ class HomeActivity : AppCompatActivity() {
 
                     } else {
                         if (response.code() == MyApplication.applicationContext().SESSION) {
-                            MyApplication.applicationContext().sessionSignIn()
+                            MyApplication.applicationContext().sessionSignIn{ result ->
+                                if (result) {
+                                    getjobs(binding, pageNumber, pageSize)
+                                }
+                            }
                         } else {
                             MyApplication.applicationContext().showInvalidErrorToast()
                         }

@@ -60,12 +60,12 @@ class CreateAccountActivity : AppCompatActivity() {
     }
 
     fun setupClickableTextView(textView: TextView) {
-        val fullText = resources.getText(R.string.terms_and_conditions);
+        val fullText = resources.getText(R.string.terms_and_conditions_privacy);
 
         val spannableString = SpannableString(fullText)
 
-        val clickablePart1 = "Terms"
-        val clickablePart2 = "Conditions of use"
+        val clickablePart1 = "Terms and Conditions of use"
+        val clickablePart2 = "Privacy"
 
         val clickableSpan1 = object : ClickableSpan() {
             override fun onClick(view: View) {

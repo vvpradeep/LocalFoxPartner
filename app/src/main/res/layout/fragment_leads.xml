@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/count_ll_corner_bg"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -114,8 +114,7 @@
                 android:id="@+id/jobs_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="20dp"
+                android:paddingBottom="2dp"
                 app:layout_constraintVertical_weight="1"></androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

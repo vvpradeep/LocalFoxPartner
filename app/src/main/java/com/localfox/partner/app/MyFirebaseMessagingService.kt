@@ -33,7 +33,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentText(remoteMessage.notification!!.body).setAutoCancel(true)
             .setContentIntent(pendingIntent)
 
-        builder.setSmallIcon(R.drawable.icon_call_search)
+        builder.setSmallIcon(R.drawable.notification_icon_round)
         val manager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

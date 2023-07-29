@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/parent_ll"
     android:background="@color/app_bg">
 
 
@@ -10,7 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:padding="30dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="30dp"
+        android:paddingRight="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -42,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingBottom="20dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/invitation_tv">
@@ -66,7 +70,7 @@
                     android:id="@+id/location_ll"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/white_round_corner_bg"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
@@ -87,7 +91,7 @@
                         android:id="@+id/job_location_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginLeft="15dp"
                         android:fontFamily="@font/inter_semibold"
                         android:gravity="top"
                         android:text="Job location"
@@ -114,7 +118,7 @@
                     android:id="@+id/time_ll"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/white_round_corner_bg"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
@@ -135,7 +139,7 @@
                         android:id="@+id/job_time_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginLeft="15dp"
                         android:fontFamily="@font/inter_semibold"
                         android:gravity="top"
                         android:text="How soon"
@@ -143,7 +147,8 @@
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@+id/time_icon"
                         app:layout_constraintLeft_toRightOf="@+id/time_icon"
-                        app:layout_constraintStart_toStartOf="@+id/time_icon"></TextView>
+                        app:layout_constraintTop_toTopOf="@+id/time_icon"
+                        ></TextView>
 
                     <TextView
                         android:id="@+id/time_tv"
@@ -164,7 +169,7 @@
                     android:id="@+id/des_ll"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/white_round_corner_bg"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
@@ -185,7 +190,7 @@
                         android:id="@+id/job_des_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginLeft="19dp"
                         android:fontFamily="@font/inter_semibold"
                         android:gravity="top"
                         android:text="Job description"
@@ -197,15 +202,17 @@
 
                     <TextView
                         android:id="@+id/des_tv"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="top"
-                        android:text="We need a flooring to be done by end of this month at Marsden Park. There are some broken tiles in couple of bedrooms. Those need to be replaced with new and also install the new tiles in master bedroom. 16sqm."
                         android:textColor="#64748B"
+                        android:inputType="textMultiLine"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="@+id/job_des_tv"
-                        app:layout_constraintTop_toBottomOf="@id/job_des_tv"></TextView>
+                        app:layout_constraintTop_toBottomOf="@id/job_des_tv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"></TextView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -214,7 +221,7 @@
                     android:id="@+id/photos_ll"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/white_round_corner_bg"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
@@ -232,7 +239,7 @@
                         android:id="@+id/job_photo_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="15dp"
                         android:fontFamily="@font/inter_semibold"
                         android:gravity="top"
                         android:text="Photos"
@@ -256,9 +263,9 @@
 
                     <com.localfox.partner.app.ExpandableHeightGridView
                         android:id="@+id/photo_grid"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:fontFamily="@font/inter_regular"
                         android:gravity="top"
                         android:isScrollContainer="false"
@@ -266,8 +273,11 @@
                         android:scrollbars="none"
                         android:textSize="14sp"
                         android:stretchMode="columnWidth"
+                        app:layout_constraintLeft_toLeftOf="@+id/job_photo_tv"
                         app:layout_constraintStart_toStartOf="@+id/job_photo_tv"
-                        app:layout_constraintTop_toBottomOf="@id/job_photo_tv"></com.localfox.partner.app.ExpandableHeightGridView>
+                        app:layout_constraintTop_toBottomOf="@id/job_photo_tv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"></com.localfox.partner.app.ExpandableHeightGridView>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

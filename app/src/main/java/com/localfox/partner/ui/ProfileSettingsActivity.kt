@@ -1,11 +1,14 @@
 package com.localfox.partner.ui
 
+import android.content.Context
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.provider.Telephony
 import android.text.TextUtils
+import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.localfox.partner.app.MyApplication
@@ -26,10 +29,6 @@ class ProfileSettingsActivity : AppCompatActivity() {
         binding = ActivityProfileSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        val intentFilter = IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION)
-        registerReceiver(receiver, intentFilter)
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
@@ -45,13 +44,37 @@ class ProfileSettingsActivity : AppCompatActivity() {
             finish()
         }
         setData()
+    }
 
+    override fun onStart() {
+        super.onStart()
+        val intentFilter = IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION)
+        registerReceiver(receiver, intentFilter)
     }
 
     override fun onStop() {
-        unregisterReceiver(receiver)
+       try {
+           unregisterReceiver(receiver)
+       } catch (e: IllegalArgumentException) {
+           e.printStackTrace();
+       }
+        dismissKeyboard()
         super.onStop()
+
     }
+
+    private fun dismissKeyboard() {
+        val inputMethodManager =
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        val currentFocusView: View? = currentFocus
+        currentFocusView?.let {
+            inputMethodManager.hideSoftInputFromWindow(
+                it.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
+    }
+
     fun setData() {
         var data: String = MyApplication.applicationContext()
             .getStringPrefsData(MyApplication.applicationContext().PROFILE_DATA)

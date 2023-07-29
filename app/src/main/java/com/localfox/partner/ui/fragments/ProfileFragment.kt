@@ -113,7 +113,7 @@ class ProfileFragment : Fragment() {
 
         binding.profileSettingsLl.setOnClickListener() {
             val intent = Intent(requireActivity(), ProfileSettingsActivity::class.java)
-            startActivityForResult(intent,PROFILE_PICK_CODE)
+            startActivityForResult(intent, PROFILE_PICK_CODE)
         }
 
         binding.logoffTv.setOnClickListener {
@@ -121,11 +121,13 @@ class ProfileFragment : Fragment() {
         }
 
         binding.profilePrivacySettingsLl.setOnClickListener() {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://localfox.com.au/partner/privacy"))
+            val intent =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://localfox.com.au/partner/privacy"))
             startActivity(intent)
         }
         binding.profileTCLl.setOnClickListener() {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://localfox.com.au/partner/terms"))
+            val intent =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://localfox.com.au/partner/terms"))
             startActivity(intent)
         }
         setData()
@@ -135,6 +137,7 @@ class ProfileFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).navigationPosition(2)
+
     }
 
     fun setData() {
@@ -151,20 +154,28 @@ class ProfileFragment : Fragment() {
         }
 
         if (TextUtils.isEmpty(imagePath)) {
-            if (profileData.data?.profilePhoto != null && !profileData.data?.profilePhoto.toString().contains("no-photo")) {
+            if (profileData.data?.profilePhoto != null && !profileData.data?.profilePhoto.toString()
+                    .contains("no-photo")
+            ) {
                 Glide.with(requireContext())
                     .load(profileData.data?.profilePhoto)
                     .fitCenter()
                     .into(binding.profileImage)
             } else {
                 Glide.with(requireContext())
-                    .load(LetterDrawable(profileData.data?.firstName!!.get(0) + " "+ profileData.data?.lastName!!.get(0), requireContext().applicationContext))
+                    .load(
+                        LetterDrawable(
+                            profileData.data?.firstName!!.get(0) + " " + profileData.data?.lastName!!.get(
+                                0
+                            ), requireContext().applicationContext
+                        )
+                    )
                     .into(binding.profileImage)
             }
         } else {
             binding.profileImage?.setImageURI(Uri.parse(imagePath))
         }
-        binding.nameTv.setText(profileData.data?.firstName + " "+ profileData.data?.lastName)
+        binding.nameTv.setText(profileData.data?.firstName + " " + profileData.data?.lastName)
 //        binding.roleTv.setText(profileData.data?.role)
         binding.emailTv.setText(profileData.data?.emailAddress)
         binding.addressTv.setText(profileData.data?.address)
@@ -229,7 +240,6 @@ class ProfileFragment : Fragment() {
 
                         } else {
                             if (response!!.code() == MyApplication.applicationContext().SESSION) {
-                                MyApplication.applicationContext().sessionSignIn()
                                 Log.d("res", "res")
                             } else {
 
@@ -430,21 +440,34 @@ class ProfileFragment : Fragment() {
                         call: Call<ProfileEntity>?,
                         response: Response<ProfileEntity>?
                     ) {
-                        binding.progressCircular.setVisibility(View.GONE)
+
                         if (response!!.isSuccessful && response!!.body() != null) {
+                            binding.progressCircular.setVisibility(View.GONE)
                             val gson = Gson()
                             val json = gson.toJson(response.body()) //
                             MyApplication.applicationContext().getAPP(requireActivity())
-                            MyApplication.applicationContext().saveStringPrefsData(json,MyApplication.applicationContext().PROFILE_DATA)
-                            MyApplication.applicationContext().saveNotificationsData(response.body()!!.data!!.NotificationSettings!!)
-                        }
-                        else{ if (response.code() == MyApplication.applicationContext().SESSION) {
-                            MyApplication.applicationContext().sessionSignIn()
+                            MyApplication.applicationContext().saveStringPrefsData(
+                                json,
+                                MyApplication.applicationContext().PROFILE_DATA
+                            )
+                            MyApplication.applicationContext()
+                                .saveNotificationsData(response.body()!!.data!!.NotificationSettings!!)
                         } else {
-                            MyApplication.applicationContext().showInvalidErrorToast()
-                        }
+                            if (response.code() == MyApplication.applicationContext().SESSION) {
+                                MyApplication.applicationContext().sessionSignIn { result ->
+                                    if (result) {
+                                        getProfile(binding)
+                                    } else {
+                                        binding.progressCircular.setVisibility(View.GONE)
+                                    }
+                                }
+                            } else {
+                                binding.progressCircular.setVisibility(View.GONE)
+                                MyApplication.applicationContext().showInvalidErrorToast()
+                            }
                         }
                     }
+
                     override fun onFailure(call: Call<ProfileEntity>?, t: Throwable?) {
                         binding.progressCircular.setVisibility(View.GONE)
                         MyApplication.applicationContext().showInvalidErrorToast()
@@ -507,7 +530,11 @@ class ProfileFragment : Fragment() {
                             imagePath = ""
                             try {
                                 if (response.code() == MyApplication.applicationContext().SESSION) {
-                                     MyApplication.applicationContext().sessionSignIn()
+                                    MyApplication.applicationContext().sessionSignIn { result ->
+                                        if (result) {
+                                            addProfilePhoto()
+                                        }
+                                    }
                                 } else {
                                     val jObjError = JSONObject(response.errorBody()?.string())
                                     MyApplication.applicationContext()

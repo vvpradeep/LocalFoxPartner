@@ -85,7 +85,13 @@ class UpdateMobileOTPFragment : BottomSheetDialogFragment() {
     override fun onPause() {
         super.onPause()
         // Unregister the broadcast receiver when the activity is paused
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(otpReceiver)
+        try {
+            LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(otpReceiver)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace();
+        }
+
+
     }
 
     fun sendmobileNumberOTP(otp: String,
@@ -149,8 +155,9 @@ class UpdateMobileOTPFragment : BottomSheetDialogFragment() {
                         call: Call<ResponseBody>?,
                         response: Response<ResponseBody>?
                     ) {
-                        binding.progressCircular.setVisibility(View.GONE)
+
                         if (response!!.isSuccessful && response!!.body() != null) {
+                            binding.progressCircular.setVisibility(View.GONE)
                             MyApplication.applicationContext().showSuccessToast("Mobile number updated successfully")
                             if (dialog != null)
                                 dialog!!.dismiss()
@@ -158,8 +165,15 @@ class UpdateMobileOTPFragment : BottomSheetDialogFragment() {
                             requireActivity().finish()
                         } else {
                             if (response!!.code() == MyApplication.applicationContext().SESSION) {
-                                MyApplication.applicationContext().sessionSignIn()
+                                MyApplication.applicationContext().sessionSignIn{ result ->
+                                    if (result) {
+                                        sendmobileNumber(_mobileNumber, reference, binding)
+                                    } else {
+                                        binding.progressCircular.setVisibility(View.GONE)
+                                    }
+                                }
                             } else {
+                                binding.progressCircular.setVisibility(View.GONE)
                                 val jsonObject = JSONObject(response.errorBody()?.string())
                                 val error: String = jsonObject.getString("error")
                                 MyApplication.applicationContext().showErrorToast(""+ error)

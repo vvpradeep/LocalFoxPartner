@@ -9,15 +9,25 @@ plugins {
 
 android {
     namespace 'com.localfox.partner'
-    compileSdk 32
+    compileSdk 33
+
+    signingConfigs {
+        release {
+            storeFile file("app_release.keystore")
+            storePassword "Localfox@123"
+            keyAlias "key1"
+            keyPassword "Localfox@123"
+            v2SigningEnabled false
+        }
+    }
 
     defaultConfig {
         applicationId "com.localfox.partner"
         minSdk 21
-        targetSdk 32
-        versionCode 1
-        versionName "1.0"
-
+        targetSdk 33
+        versionCode 4
+        versionName "1.0.3"
+        buildConfigField "String", "GOOGLE_PLACES_API_KEY", "\"${GOOGLE_PLACES_API_KEY}\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

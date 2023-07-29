@@ -68,19 +68,28 @@ class AccountInActiveActivity : AppCompatActivity() {
                             val gson = Gson()
                             val json = gson.toJson(response.body()) //
                             MyApplication.applicationContext().getAPP(this@AccountInActiveActivity)
-                            MyApplication.applicationContext().saveStringPrefsData(json,MyApplication.applicationContext().PROFILE_DATA)
-                            MyApplication.applicationContext().saveNotificationsData(response.body()!!.data!!.NotificationSettings!!)
+                            MyApplication.applicationContext().saveStringPrefsData(
+                                json,
+                                MyApplication.applicationContext().PROFILE_DATA
+                            )
+                            MyApplication.applicationContext()
+                                .saveNotificationsData(response.body()!!.data!!.NotificationSettings!!)
                             val intent =
                                 Intent(this@AccountInActiveActivity, HomeActivity::class.java)
                             startActivity(intent)
-                        }
-                        else { if (response.code() == MyApplication.applicationContext().SESSION) {
-                            MyApplication.applicationContext().sessionSignIn()
                         } else {
-                            MyApplication.applicationContext().showInvalidErrorToast()
-                        }
+                            if (response.code() == MyApplication.applicationContext().SESSION) {
+                                MyApplication.applicationContext().sessionSignIn { result ->
+                                    if (result) {
+                                        getProfile(binding)
+                                    }
+                                }
+                            } else {
+                                MyApplication.applicationContext().showInvalidErrorToast()
+                            }
                         }
                     }
+
                     override fun onFailure(call: Call<ProfileEntity>?, t: Throwable?) {
                         binding.progressCircular.setVisibility(View.GONE)
                         MyApplication.applicationContext().showInvalidErrorToast()
@@ -111,8 +120,11 @@ class AccountInActiveActivity : AppCompatActivity() {
 
                         } else {
                             if (response!!.code() == MyApplication.applicationContext().SESSION) {
-                                MyApplication.applicationContext().sessionSignIn()
-                                Log.d("res", "res")
+                                MyApplication.applicationContext().sessionSignIn { result ->
+                                    if (result) {
+                                        logout()
+                                    }
+                                }
                             } else {
 
                             }

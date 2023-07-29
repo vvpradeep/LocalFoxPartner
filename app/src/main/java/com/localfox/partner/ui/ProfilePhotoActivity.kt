@@ -42,12 +42,12 @@ class ProfilePhotoActivity : AppCompatActivity() {
             if (!intent.getBooleanExtra("islocal", false))
                 Glide.with(this)
                     .load(intent.getStringExtra("id"))
-                    .transform(transformation)
+                  //  .transform(transformation)
                     .into(binding.profileImage)
             else
                 Glide.with(this)
                     .load(Uri.parse(intent.getStringExtra("id")))
-                    .transform(transformation)
+                  //  .transform(transformation)
                     .into(binding.profileImage!!)
         }
 

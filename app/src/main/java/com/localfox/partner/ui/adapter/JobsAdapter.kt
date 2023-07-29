@@ -17,6 +17,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.localfox.partner.R
@@ -24,6 +25,7 @@ import com.localfox.partner.app.AppUtils
 import com.localfox.partner.app.LetterDrawable
 import com.localfox.partner.app.MyApplication
 import com.localfox.partner.entity.Jobs
+import com.localfox.partner.ui.HomeActivity
 
 
 class JobsAdapter(private var jobs : ArrayList<Jobs>, var context : Context, private val listener: OnItemClickListener, var isSearch: Boolean) : RecyclerView.Adapter<JobsAdapter.ViewHolder>() {
@@ -35,7 +37,7 @@ class JobsAdapter(private var jobs : ArrayList<Jobs>, var context : Context, pri
             it.customer!!.fullName!!.contains(query, ignoreCase = true) ||
             it.customer!!.mobileNumber!!.contains(query, ignoreCase = true) ||
             it.customer!!.emailAddress!!.contains(query, ignoreCase = true) ||
-            it.location!!.suburb!!.contains(query, ignoreCase = true)
+            it.location!!.formattedAddress!!.contains(query, ignoreCase = true)
         }
         notifyDataSetChanged()
     }
@@ -67,19 +69,27 @@ class JobsAdapter(private var jobs : ArrayList<Jobs>, var context : Context, pri
                 Glide.with(context)
                     .load(filteredData.get(position).customer!!.profilePhoto)
                     .into(holder.imageView)
-            } else if (filteredData.get(position).customer!!.fullName != null){
+            } else if (filteredData.get(position).customer!!.fullName != null) {
                 val parts = filteredData.get(position).customer!!.fullName!!.split(" ")
-
+                var name: String? = null;
+                if (parts.size > 1) {
+                    name = parts[0]!!.get(0)+""+parts[1]!!.get(0)
+                } else {
+                    name = parts[0]!!.get(0)+""+parts[0]!!.get(1)
+                }
                 Glide.with(context)
-                    .load(LetterDrawable(parts[0]!!.get(0)+""+parts[1]!!.get(0), context.applicationContext))
+                    .load(LetterDrawable(name, context.applicationContext))
                     .into(holder.imageView)
             }
 
         }
-        holder.addressTextView.text = address!!.suburb + " " + address!!.state + " "+address!!.postCode
+        var locationString =  address!!.streetNumber + " " +  address!!.streetName +" \n" +
+                address!!.suburb + " " + address!!.state + " "+address!!.postCode
+        holder.addressTextView.text = locationString.toString()
         holder.dateTextView.text =  MyApplication.applicationContext().formatDate(filteredData!!.get(position).createdDate)
 
-        if (position == jobs.size - 1 && jobs.size % 10 == 0) {
+        val activity = context as HomeActivity
+        if (position == jobs.size - 1 && jobs.size % activity.pageSize  == 0) {
             lastposition = position
             listener.getNewPageData()
         }

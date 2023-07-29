@@ -1,6 +1,7 @@
 package com.localfox.partner.ui.fragments
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -14,16 +15,13 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.localfox.partner.R
 import com.localfox.partner.app.ApiUtils
 import com.localfox.partner.app.MyApplication
-import com.localfox.partner.databinding.ActivityHomeBinding
 import com.localfox.partner.databinding.FragmentLeadsBinding
 import com.localfox.partner.entity.Jobs
 import com.localfox.partner.entity.JobsList
@@ -47,23 +45,31 @@ class LeadsFragment : Fragment(), JobsAdapter.OnItemClickListener {
 
     private val CALL_PERMISSION_REQUEST_CODE = 1010
 
+    private lateinit var mLinearLayoutManager: LinearLayoutManager
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentLeadsBinding.inflate(inflater, container, false)
 
 
-
         _binding.swipeRefreshLayout.setOnRefreshListener {
-            getjobs(_binding, 1, 10)
+            val activity = requireActivity() as HomeActivity
+            getjobs(_binding, 1, activity.pageSize)
             _binding.swipeRefreshLayout.isRefreshing = false
         }
 
-        // getjobs(_binding)
 
-        // this creates a vertical layout Manager
-        _binding.jobsRecyclerview.layoutManager = LinearLayoutManager(activity)
+        mLinearLayoutManager = LinearLayoutManager(activity)
+        _binding.jobsRecyclerview.layoutManager = mLinearLayoutManager
         _binding.jobsRecyclerview.setNestedScrollingEnabled(false);
+
+        _binding.jobsRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                _binding.swipeRefreshLayout.setEnabled(mLinearLayoutManager.findFirstCompletelyVisibleItemPosition() === 0) // 0 is for first item position
+            }
+        })
 
         _binding.searchIV.setOnClickListener {
             val activityView = activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
@@ -81,21 +87,33 @@ class LeadsFragment : Fragment(), JobsAdapter.OnItemClickListener {
 
         // This will pass the ArrayList to our Adapter
         binding.invitationLl.setOnClickListener {
-            if (jobsData != null) {
-                for (invitations in jobsData!!.data!!.jobInviations) {
+            val activity = requireActivity() as HomeActivity
+            if ( activity.jobsData1 != null) {
+                for ((index, item) in activity.jobsData1!!.data!!.jobInviations.withIndex()) {
                     val intent = Intent(
                         activity,
                         InvitationActivity::class.java
                     )
-                    intent.putExtra("invitations", invitations)
-                    startActivity(intent)
+                    intent.putExtra("invitations", item)
+                    if (index + 1 == activity.jobsData1!!.data!!.jobInviations.size) {
+                        startActivityForResult(intent, 1009)
+                    } else {
+                        startActivity(intent)
+                    }
                 }
+
             }
         }
 
-
-
         return binding.root
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode ==1009) {
+            val activity = requireActivity() as HomeActivity
+            getjobs(_binding, 1, activity.pageSize)
+        }
     }
 
     fun getjobs(binding: FragmentLeadsBinding, pageNumber : Int, pageSize: Int) {
@@ -111,12 +129,13 @@ class LeadsFragment : Fragment(), JobsAdapter.OnItemClickListener {
                 override fun onResponse(
                     call: Call<JobsList>?, response: Response<JobsList>?
                 ) {
-                    binding.progressCircular.setVisibility(View.GONE)
                     if (response!!.isSuccessful && response!!.body() != null) {
+                        binding.progressCircular.setVisibility(View.GONE)
                         val gson = Gson()
                         val json = gson.toJson(response.body()) //
                         var jobsData1 = response.body()!!
                         val activity = requireActivity() as HomeActivity
+                        activity.jobsData1 = response.body()!!
                         if (jobsData1 != null  && jobsData1!!.data != null && jobsData1!!.data!!.jobs != null &&  jobsData1!!.data!!.jobs!!.size > 0) {
                             activity.jobsList.clear()
                             activity.jobsList.addAll(jobsData1!!.data!!.jobs)
@@ -128,8 +147,15 @@ class LeadsFragment : Fragment(), JobsAdapter.OnItemClickListener {
                         //sendDataToFragment(response.body()!!)
                     } else {
                         if (response.code() == MyApplication.applicationContext().SESSION) {
-                            MyApplication.applicationContext().sessionSignIn()
+                            MyApplication.applicationContext().sessionSignIn { result ->
+                                if (result) {
+                                   getjobs(binding, pageNumber, pageSize)
+                                } else {
+                                    binding.progressCircular.setVisibility(View.GONE)
+                                }
+                            }
                         } else {
+                            binding.progressCircular.setVisibility(View.GONE)
                             MyApplication.applicationContext().showInvalidErrorToast()
                         }
                     }
@@ -236,6 +262,7 @@ class LeadsFragment : Fragment(), JobsAdapter.OnItemClickListener {
     fun setAdapter() {
         val activity = requireActivity() as HomeActivity
         val data = activity.jobsData1
+        jobsData = activity.jobsData1
         if (activity.jobsList != null && activity.jobsList!!.size > 0) {
             adapter = JobsAdapter(activity.jobsList, requireContext()!!, this, false)
             _binding.jobsRecyclerview.adapter = adapter

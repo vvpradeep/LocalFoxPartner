@@ -1,5 +1,6 @@
 package com.localfox.partner.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -21,6 +22,7 @@ import com.localfox.partner.entity.JobInviations
 import com.localfox.partner.entity.JobsList
 import com.localfox.partner.ui.adapter.ImagesGridAdapter
 import com.localfox.partner.ui.adapter.JobsAdapter
+import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -88,34 +90,42 @@ class InvitationActivity : AppCompatActivity() {
             headers["Content-Type"] = "application/json"
             headers["Authorization"] = "Bearer " + MyApplication.applicationContext().getUserToken()
 
-            val call: Call<JobsList> = ApiUtils.apiService.acceptJob(headers, id)
-            call.enqueue(object : Callback<JobsList> {
+            val call: Call<ResponseBody> = ApiUtils.apiService.acceptJob(headers, id)
+            call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
-                    call: Call<JobsList>?, response: Response<JobsList>?
+                    call: Call<ResponseBody>?, response: Response<ResponseBody>?
                 ) {
-                    binding.progressCircular.setVisibility(View.GONE)
                     if (response!!.isSuccessful && response!!.body() != null) {
-                        val gson = Gson()
-                        val json = gson.toJson(response.body()) //
+                        binding.progressCircular.setVisibility(View.GONE)
                         MyApplication.applicationContext().showSuccessToast("Invitation Accepted successfully")
-                        finish();
+                        setResult(Activity.RESULT_OK)
+                        finish()
                         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_in_right)
                     } else {
                         if (response.code() == MyApplication.applicationContext().SESSION) {
-                            MyApplication.applicationContext().sessionSignIn()
-                            val jsonObject = JSONObject(response.errorBody()?.string())
-                            val error: String = jsonObject.getString("error")
-                            MyApplication.applicationContext().showErrorToast(""+ error)
+                            MyApplication.applicationContext().sessionSignIn { result ->
+                                if (result) {
+                                    acceptJob(binding, id)
+                                } else {
+                                    binding.progressCircular.setVisibility(View.GONE)
+                                    val jsonObject = JSONObject(response.errorBody()?.string())
+                                    val error: String = jsonObject.getString("error")
+                                    MyApplication.applicationContext().showErrorToast(""+ error)
+                                    setResult(Activity.RESULT_OK)
+                                    finish()
+                                }
+                            }
                         } else {
+                            binding.progressCircular.setVisibility(View.GONE)
                             val jsonObject = JSONObject(response.errorBody()?.string())
                             val error: String = jsonObject.getString("error")
                             MyApplication.applicationContext().showErrorToast(""+ error)
+                            setResult(Activity.RESULT_OK)
+                            finish()
                         }
-                        finish();
                     }
                 }
-
-                override fun onFailure(call: Call<JobsList>?, t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
                     binding.progressCircular.setVisibility(View.GONE)
                     MyApplication.applicationContext().showErrorToast(t!!.localizedMessage)
                     Log.d("response", "onFailure ")
@@ -135,34 +145,43 @@ class InvitationActivity : AppCompatActivity() {
             headers["Content-Type"] = "application/json"
             headers["Authorization"] = "Bearer " + MyApplication.applicationContext().getUserToken()
 
-            val call: Call<JobsList> = ApiUtils.apiService.declineJob(headers, id)
-            call.enqueue(object : Callback<JobsList> {
+            val call: Call<ResponseBody> = ApiUtils.apiService.declineJob(headers, id)
+            call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
-                    call: Call<JobsList>?, response: Response<JobsList>?
+                    call: Call<ResponseBody>?, response: Response<ResponseBody>?
                 ) {
-                    binding.progressCircular.setVisibility(View.GONE)
                     if (response!!.isSuccessful && response!!.body() != null) {
-                        val gson = Gson()
-                        val json = gson.toJson(response.body()) //
+                        binding.progressCircular.setVisibility(View.GONE)
                         MyApplication.applicationContext().showSuccessToast("Invitation Rejected successfully")
+                        setResult(Activity.RESULT_OK)
                         finish();
                         overridePendingTransition(0, R.anim.slide_in_right_left_open)
                     } else {
                         if (response.code() == MyApplication.applicationContext().SESSION) {
-                            MyApplication.applicationContext().sessionSignIn()
-                            val jsonObject = JSONObject(response.errorBody()?.string())
-                            val error: String = jsonObject.getString("error")
-                            MyApplication.applicationContext().showErrorToast(""+ error)
+                            MyApplication.applicationContext().sessionSignIn { result ->
+                                if (result) {
+                                    declineJob(binding, id)
+                                } else {
+                                    binding.progressCircular.setVisibility(View.GONE)
+                                    val jsonObject = JSONObject(response.errorBody()?.string())
+                                    val error: String = jsonObject.getString("error")
+                                    MyApplication.applicationContext().showErrorToast(""+ error)
+                                    setResult(Activity.RESULT_OK)
+                                    finish()
+                                }
+                            }
                         } else {
+                            binding.progressCircular.setVisibility(View.GONE)
                             val jsonObject = JSONObject(response.errorBody()?.string())
                             val error: String = jsonObject.getString("error")
                             MyApplication.applicationContext().showErrorToast(""+ error)
+                            setResult(Activity.RESULT_OK)
+                            finish()
                         }
-                        finish();
                     }
                 }
 
-                override fun onFailure(call: Call<JobsList>?, t: Throwable?) {
+                override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
                     binding.progressCircular.setVisibility(View.GONE)
                     MyApplication.applicationContext().showErrorToast(t!!.localizedMessage)
                     Log.d("response", "onFailure ")
@@ -173,12 +192,5 @@ class InvitationActivity : AppCompatActivity() {
             Log.d("response", "Exception " + e.printStackTrace())
         }
     }
-
-//    override fun finish() {
-//        super.finish()
-//       // overridePendingTransition(R.anim.slide_in_left, R.anim.slide_in_right)
-//        overridePendingTransition(0, R.anim.slide_in_right_left_open)
-//
-//    }
 
 }

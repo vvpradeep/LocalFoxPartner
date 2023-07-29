@@ -24,6 +24,7 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.localfox.partner.BuildConfig
 import com.localfox.partner.R
 import com.localfox.partner.app.ApiUtils
 import com.localfox.partner.app.MyApplication
@@ -38,21 +39,29 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class UpdateAddressFragment : BottomSheetDialogFragment() {
+class UpdateAddressFragment : BottomSheetDialogFragment(),
+    ProfileAddressListAdapter.AdapterListener {
 
     private lateinit var _binding: FragmentUpdateAddressBinding
 
-    private var apiKey: String = "AIzaSyCNm9ALFy869lnQMQ9h_Q0B9QuX2ymg49o"
+    private var apiKey: String = BuildConfig.GOOGLE_PLACES_API_KEY
 
+    private var isSelected: Boolean = false
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding =  FragmentUpdateAddressBinding.inflate(inflater, container, false)
+        _binding = FragmentUpdateAddressBinding.inflate(inflater, container, false)
         _binding.closeButtonLl.setOnClickListener {
             dismiss()
         }
+
 
         _binding.addressEt.setText(getArguments()?.getString("address", ""))
         _binding.searchResult.layoutManager = LinearLayoutManager(context)
@@ -70,15 +79,28 @@ class UpdateAddressFragment : BottomSheetDialogFragment() {
         _binding.addressEt.addTextChangedListener(textWatcher);
 
         _binding.updateButton.setOnClickListener {
+            if (!isSelected) {
+                _binding.addressEt.setError("Select valid adress")
+                return@setOnClickListener
+            }
             if (!_binding.addressEt.text.toString()
-                    .isNullOrBlank())
+                    .isNullOrBlank()
+            )
                 sendAddress(
                     _binding.addressEt.text.toString(),
                     _binding
                 )
-            else _binding.addressEt.setError("enter valid adress")
+            else _binding.addressEt.setError("Select valid adress")
         }
         return _binding.root
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onItemClicked(item: Boolean) {
+        this.isSelected = item
     }
 
 
@@ -93,6 +115,7 @@ class UpdateAddressFragment : BottomSheetDialogFragment() {
 
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             val placesClient = Places.createClient(context);
+            isSelected = false
             if (count > 0) {
                 _binding.progressCircular.setVisibility(View.VISIBLE)
                 // Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest,
@@ -127,8 +150,12 @@ class UpdateAddressFragment : BottomSheetDialogFragment() {
 
                         var addressListAdapter: ProfileAddressListAdapter =
                             ProfileAddressListAdapter(
-                                context!!,
-                                chaptersList, _binding.addressEt,_binding.searchResult, this
+                                requireContext(),
+                                chaptersList,
+                                _binding.addressEt,
+                                _binding.searchResult,
+                                this,
+                                this@UpdateAddressFragment
                             )
                         _binding.progressCircular.setVisibility(View.GONE)
                         _binding.searchResult.setVisibility(View.VISIBLE)
@@ -145,6 +172,7 @@ class UpdateAddressFragment : BottomSheetDialogFragment() {
             }
         }
     }
+
 
     fun sendAddress(address: String, binding: FragmentUpdateAddressBinding) {
 
@@ -164,17 +192,29 @@ class UpdateAddressFragment : BottomSheetDialogFragment() {
                         call: Call<ResponseBody>?,
                         response: Response<ResponseBody>?
                     ) {
-                        binding.progressCircular.setVisibility(View.GONE)
                         if (response!!.isSuccessful && response!!.body() != null) {
-                            MyApplication.applicationContext().showToast(true,"Address details changed successfully", MyApplication.applicationContext())
+                            binding.progressCircular.setVisibility(View.GONE)
+                            MyApplication.applicationContext().showToast(
+                                true,
+                                "Address details changed successfully",
+                                MyApplication.applicationContext()
+                            )
                             dismiss()
                             requireActivity().setResult(RESULT_OK)
                             requireActivity().finish()
                         } else {
                             if (response!!.code() == MyApplication.applicationContext().SESSION) {
-                                MyApplication.applicationContext().sessionSignIn()
+                                MyApplication.applicationContext().sessionSignIn { result ->
+                                    if (result) {
+                                        sendAddress(address, binding)
+                                    } else {
+                                        binding.progressCircular.setVisibility(View.GONE)
+                                        MyApplication.applicationContext().showInvalidErrorToast()
+                                    }
+                                }
                                 Log.d("res", "res")
                             } else {
+                                binding.progressCircular.setVisibility(View.GONE)
                                 MyApplication.applicationContext().showInvalidErrorToast()
                             }
                         }
@@ -210,19 +250,18 @@ class UpdateAddressFragment : BottomSheetDialogFragment() {
 
         return dialog
     }
+
     private fun setupFullHeight(bottomSheet: View) {
         val layoutParams = bottomSheet.layoutParams
         layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
         bottomSheet.layoutParams = layoutParams
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
 
     override fun onDetach() {
         super.onDetach()
@@ -233,7 +272,7 @@ class UpdateAddressFragment : BottomSheetDialogFragment() {
         fun newInstance(address: String): UpdateAddressFragment {
 
 
-            var fragment : UpdateAddressFragment = UpdateAddressFragment()
+            var fragment: UpdateAddressFragment = UpdateAddressFragment()
             val args = Bundle()
             args.putString("address", address)
             fragment.setArguments(args)
@@ -242,5 +281,4 @@ class UpdateAddressFragment : BottomSheetDialogFragment() {
             return UpdateAddressFragment()
         }
     }
-
 }
